@@ -9,18 +9,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.sestefan.proyecto.R;
+import com.example.sestefan.proyecto.domain.Fotos;
 import com.example.sestefan.proyecto.recycler_view.RecyclerViewClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ListHouseImagesAdapter extends RecyclerView.Adapter<ListHouseImagesAdapter.HouseImagesViewHolder> {
+public class HouseImagesAdapter extends RecyclerView.Adapter<HouseImagesAdapter.HouseImagesViewHolder> {
 
-    private ArrayList<String> houseImages;
+    private ArrayList<Fotos> houseImages;
     private LayoutInflater inflater;
     private RecyclerViewClickListener listener;
 
-    public ListHouseImagesAdapter(Context context, ArrayList<String> houseImages, RecyclerViewClickListener listener) {
+    public HouseImagesAdapter(Context context, ArrayList<Fotos> houseImages, RecyclerViewClickListener listener) {
         inflater = LayoutInflater.from(context);
         this.houseImages = houseImages;
         this.listener = listener;
@@ -36,8 +37,8 @@ public class ListHouseImagesAdapter extends RecyclerView.Adapter<ListHouseImages
 
     @Override
     public void onBindViewHolder(@NonNull HouseImagesViewHolder holder, int position) {
-        String current = houseImages.get(position);
-        Picasso.get().load(current).into(holder.imgWorldWonder);
+        String current = houseImages.get(position).getInmuebleImagenUrl();
+        Picasso.get().load(current).into(holder.imgHouse);
     }
 
     @Override
@@ -51,14 +52,14 @@ public class ListHouseImagesAdapter extends RecyclerView.Adapter<ListHouseImages
 
     public class HouseImagesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public final ImageView imgWorldWonder;
+        private final ImageView imgHouse;
         private RecyclerViewClickListener listener;
 
         public HouseImagesViewHolder(View itemView, RecyclerViewClickListener listener) {
             super(itemView);
             itemView.setOnClickListener(this);
 
-            this.imgWorldWonder = itemView.findViewById(R.id.img_country);
+            this.imgHouse = itemView.findViewById(R.id.img_house);
             this.listener = listener;
         }
 
@@ -66,6 +67,10 @@ public class ListHouseImagesAdapter extends RecyclerView.Adapter<ListHouseImages
         public void onClick(View v) {
             int position = getLayoutPosition();
             listener.onClick(v, position);
+        }
+
+        public ImageView getImgHouse() {
+            return imgHouse;
         }
     }
 }

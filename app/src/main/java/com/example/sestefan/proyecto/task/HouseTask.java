@@ -5,16 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.AsyncTaskLoader;
 
+import com.example.sestefan.proyecto.domain.Houses;
 import com.example.sestefan.proyecto.util.NetworkUtils;
-import com.example.sestefan.proyecto.domain.House;
 
-import java.util.List;
-
-public class HouseTask extends AsyncTaskLoader<List<House>> {
+public class HouseTask extends AsyncTaskLoader<Houses> {
 
     public HouseTask(@NonNull Context context) {
         super(context);
     }
+
     @Override
     protected void onStartLoading() {
         forceLoad();
@@ -22,10 +21,10 @@ public class HouseTask extends AsyncTaskLoader<List<House>> {
 
     @Nullable
     @Override
-    public List<House> loadInBackground() {
+    public Houses loadInBackground() {
 
         NetworkUtils networkUtils = new NetworkUtils();
 
-        return networkUtils.getWorldWonders();
+        return networkUtils.homeSearch();
     }
 }

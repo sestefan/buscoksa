@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="4dp"
     android:layout_width="match_parent"
+    android:elevation="5dp"
     android:layout_height="240dp">
 
     <android.support.constraint.ConstraintLayout
@@ -12,7 +13,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/img_country"
+            android:id="@+id/img_house"
             android:layout_width="match_parent"
             android:layout_height="240dp"
             android:scaleType="centerCrop"
@@ -29,17 +30,25 @@
             android:background="@drawable/white_transparent_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/img_country">
+            app:layout_constraintBottom_toBottomOf="@+id/img_house">
 
             <TextView
-                android:id="@+id/txt_list_item"
+                android:id="@+id/txt_price"
+                android:text="@string/main_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/txt_country"
+                android:id="@+id/txt_neighborhood"
+                android:text="@string/main_neighborhood"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/txt_rooms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/main_rooms" />
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

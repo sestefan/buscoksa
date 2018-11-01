@@ -17,20 +17,19 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.sestefan.proyecto.R;
+import com.example.sestefan.proyecto.domain.Houses;
+import com.example.sestefan.proyecto.domain.Response;
+import com.example.sestefan.proyecto.fragment.FacebookLoginFragment;
 import com.example.sestefan.proyecto.recycler_view.RecyclerViewClickListener;
-import com.example.sestefan.proyecto.domain.House;
+import com.example.sestefan.proyecto.recycler_view.adapter.HouseAdapter;
 import com.example.sestefan.proyecto.task.HouseTask;
-import com.example.sestefan.proyecto.recycler_view.adapter.ListHouseAdapter;
 
-import java.util.LinkedList;
-import java.util.List;
-
-public class HouseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<List<House>> {
+public class HouseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Houses> {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private LinkedList<House> newList;
-    private ListHouseAdapter adapter;
+    private Houses houses;
+    private HouseAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +50,13 @@ public class HouseActivity extends AppCompatActivity implements NavigationView.O
         recyclerView = findViewById(R.id.recycledView);
 
         RecyclerViewClickListener adapterI = (view, position) -> {
-            House element = newList.get(position);
+            Response element = houses.getResponse().get(position);
             Intent wonderDetailActivityIntent = new Intent(this, HouseDetailActivity.class);
             wonderDetailActivityIntent.putExtra(HouseDetailActivity.EXTRA_DATA, element);
             startActivity(wonderDetailActivityIntent);
             adapter.notifyDataSetChanged();
         };
-        adapter = new ListHouseAdapter(this, newList, adapterI);
+        adapter = new HouseAdapter(this, houses, adapterI);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -71,25 +70,26 @@ public class HouseActivity extends AppCompatActivity implements NavigationView.O
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        return false;
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new FacebookLoginFragment()).commit();
+        return true;
     }
 
     @NonNull
     @Override
-    public Loader<List<House>> onCreateLoader(int i, @Nullable Bundle bundle) {
+    public Loader<Houses> onCreateLoader(int i, @Nullable Bundle bundle) {
         return new HouseTask(this);
     }
 
     @Override
-    public void onLoadFinished(@NonNull Loader<List<House>> loader, List<House> data) {
+    public void onLoadFinished(@NonNull Loader<Houses> loader, Houses data) {
         Log.d("tasks", System.identityHashCode(this) + " OnPostExecute");
-        adapter.setHouses((LinkedList<House>) data);
-        newList = (LinkedList<House>) data;
+        adapter.setResponses(data);
+        houses = data;
         adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onLoaderReset(@NonNull Loader<List<House>> loader) {
+    public void onLoaderReset(@NonNull Loader<Houses> loader) {
 
     }
 }
