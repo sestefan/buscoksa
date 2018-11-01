@@ -31,6 +31,11 @@ public class FacebookLoginFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public static FacebookLoginFragment newInstance() {
+        FacebookLoginFragment fragment = new FacebookLoginFragment();
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
