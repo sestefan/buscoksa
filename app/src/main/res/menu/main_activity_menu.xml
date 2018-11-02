@@ -16,6 +16,13 @@
             android:id="@+id/nav_login"
             android:icon="@drawable/baseline_account_circle_24"
             android:title="@string/login" />
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/baseline_account_circle_24"
+            android:title="@string/logout"
+            android:visible="false" />
+
         <item
             android:id="@+id/nav_search"
             android:icon="@drawable/baseline_search_24"

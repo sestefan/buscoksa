@@ -1,5 +1,6 @@
 package com.example.sestefan.proyecto.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,8 +22,11 @@ public class FacebookLoginFragment extends Fragment {
 
     private static final String EMAIL = "email";
 
+    private FragmentEventListener fragmentEventListener;
+
     private CallbackManager callbackManager;
     private LoginButton loginButton;
+
 
     public FacebookLoginFragment() {
         // Required empty public constructor
@@ -50,11 +54,13 @@ public class FacebookLoginFragment extends Fragment {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
+                fragmentEventListener.hideLoginMenuItem();
+                fragmentEventListener.showPostLoginFragment();
             }
 
             @Override
             public void onCancel() {
+                fragmentEventListener.showLoginMenuItem();
 
             }
 
@@ -67,7 +73,19 @@ public class FacebookLoginFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof FragmentEventListener) {
+            fragmentEventListener = (FragmentEventListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement FragmentEventListener");
+        }
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+
 }
