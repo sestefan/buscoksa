@@ -102,17 +102,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance()).commit();
         navigationView.getMenu().findItem(R.id.nav_login).setChecked(false);
         navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
-        ImageView imgFacebookLogin = navigationView.findViewById(R.id.img_fb_profile);
+        ImageView imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);
         String facebookUserId = AccessToken.getCurrentAccessToken().getUserId();
         String facebookLoginImageUrl = "http://graph.facebook.com/" + facebookUserId + "/picture?type=large";
         String facebookFullName = Profile.getCurrentProfile().getName();
-        TextView txtFacebookFullName = navigationView.findViewById(R.id.fb_full_name);
+        TextView txtFacebookFullName = navigationView.getHeaderView(0).findViewById(R.id.fb_full_name);
         if (facebookLoginImageUrl != null && !facebookLoginImageUrl.isEmpty()) {
             Picasso.get().load(facebookLoginImageUrl).into(imgFacebookLogin);
         } else {
             Picasso.get().load(R.drawable.menu_header_img).into(imgFacebookLogin);
         }
-        txtFacebookFullName.setText(facebookFullName.isEmpty() ? facebookFullName : "You Know Who");
+        txtFacebookFullName.setText(!facebookFullName.isEmpty() ? facebookFullName : "You Know Who");
 
         GraphRequestAsyncTask request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
             @Override
