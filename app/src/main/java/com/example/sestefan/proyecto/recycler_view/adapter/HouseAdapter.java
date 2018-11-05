@@ -47,9 +47,9 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHol
     @Override
     public void onBindViewHolder(@NonNull HouseViewHolder holder, int position) {
         Response current = houses.getResponse().get(position);
-        holder.getTxtPrice().setText(current.getInmueblePrecio());
-        holder.getTxtNeighborhood().setText(current.getInmuebleBarrio());
-        holder.getTxtRooms().setText(current.getInmuebleCantDormitorio());
+        holder.getTxtPrice().setText("Price: " + current.getInmueblePrecio());
+        holder.getTxtNeighborhood().setText("Neighborhood: " + current.getInmuebleBarrio());
+        holder.getTxtRooms().setText("#rooms: " + current.getInmuebleCantDormitorio());
         ArrayList<Fotos> images = current.getFotos();
         if (images != null && images.size() > 0) {
             Picasso.get().load(images.get(0).getInmuebleImagenUrl()).into(holder.getImgHouse());

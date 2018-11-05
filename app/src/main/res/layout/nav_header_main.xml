@@ -1,14 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/nav_header_height"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nav_header_height"
+        android:orientation="vertical"
+        android:weightSum="2">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#2a737b">
+
+        </View>
+
+        <TextView
+            android:id="@+id/fb_full_name"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:gravity="bottom|center"
+            android:textColor="#2a737b"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <ImageView
-        android:id="@+id/img_view"
-        android:layout_width="match_parent"
+        android:id="@+id/img_fb_profile"
+        android:layout_width="95dp"
         android:layout_height="wrap_content"
-        android:scaleType="fitCenter"
+        android:layout_centerInParent="true"
         android:src="@drawable/menu_header_img" />
-
-</LinearLayout>
+</RelativeLayout>
