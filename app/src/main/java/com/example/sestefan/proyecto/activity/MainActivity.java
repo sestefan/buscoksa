@@ -21,9 +21,9 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphRequestAsyncTask;
 import com.facebook.GraphResponse;
-import com.facebook.Profile;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FragmentEventListener {
@@ -105,21 +105,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);
         String facebookUserId = AccessToken.getCurrentAccessToken().getUserId();
         String facebookLoginImageUrl = "http://graph.facebook.com/" + facebookUserId + "/picture?type=large";
-        String facebookFullName = Profile.getCurrentProfile().getName();
         TextView txtFacebookFullName = navigationView.getHeaderView(0).findViewById(R.id.fb_full_name);
         if (facebookLoginImageUrl != null && !facebookLoginImageUrl.isEmpty()) {
-            Picasso.get().load(facebookLoginImageUrl).into(imgFacebookLogin);
+            Picasso.get().load(facebookLoginImageUrl).transform(new CropCircleTransformation()).into(imgFacebookLogin);
         } else {
             Picasso.get().load(R.drawable.menu_header_img).into(imgFacebookLogin);
         }
-        txtFacebookFullName.setText(!facebookFullName.isEmpty() ? facebookFullName : "You Know Who");
 
         GraphRequestAsyncTask request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject user, GraphResponse graphResponse) {
-                Log.d("TEST", user.optString("email"));
-                Log.d("TEST", user.optString("name"));
-                Log.d("TEST", user.optString("id"));
+                try {
+                    txtFacebookFullName.setText(!user.getString("name").isEmpty() ? user.getString("name") : "You Know Who");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d("GraphResponse", graphResponse.getRawResponse());
+                Log.d("GraphResponse", user.optString("email"));
+                Log.d("GraphResponse", user.optString("name"));
+                Log.d("GraphResponse", user.optString("id"));
             }
         }).executeAsync();
     }
