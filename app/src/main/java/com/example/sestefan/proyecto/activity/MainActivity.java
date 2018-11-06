@@ -30,6 +30,8 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FragmentEventListener {
 
+    private static final String FACEBOOK_GRAPH_URL = "http://graph.facebook.com/{__USER_ID__}/picture?type=large";
+
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
@@ -105,23 +107,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.getMenu().findItem(R.id.nav_login).setChecked(false);
         navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
         ImageView imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);
-        String facebookUserId = AccessToken.getCurrentAccessToken().getUserId();
-        String facebookLoginImageUrl = "http://graph.facebook.com/" + facebookUserId + "/picture?type=large";
         TextView txtFacebookFullName = navigationView.getHeaderView(0).findViewById(R.id.fb_full_name);
-        if (facebookLoginImageUrl != null && !facebookLoginImageUrl.isEmpty()) {
-            Picasso.get().load(facebookLoginImageUrl).transform(new CropCircleTransformation()).into(imgFacebookLogin);
-        } else {
-            Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
-        }
 
         GraphRequestAsyncTask request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject user, GraphResponse graphResponse) {
                 try {
+                    String facebookLoginImageUrl = FACEBOOK_GRAPH_URL.replace("{__USER_ID__}", user.getString("id"));
+                    if (facebookLoginImageUrl != null && !facebookLoginImageUrl.isEmpty()) {
+                        Picasso.get().load(facebookLoginImageUrl).transform(new CropCircleTransformation()).into(imgFacebookLogin);
+                    } else {
+                        Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
+                    }
                     txtFacebookFullName.setText(!user.getString("name").isEmpty() ? user.getString("name") : "You Know Who");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
                 Log.d("GraphResponse", graphResponse.getRawResponse());
                 Log.d("GraphResponse", user.optString("email"));
                 Log.d("GraphResponse", user.optString("name"));
