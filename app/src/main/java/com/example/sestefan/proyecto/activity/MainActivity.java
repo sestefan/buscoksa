@@ -8,7 +8,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -92,12 +91,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void hideLoginMenuItem() {
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
+        navigationView.getMenu().findItem(R.id.nav_bookmarks).setVisible(true);
     }
 
     @Override
     public void showLoginMenuItem() {
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
-        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
+        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_bookmarks).setVisible(false);
     }
 
@@ -123,11 +123,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-                Log.d("GraphResponse", graphResponse.getRawResponse());
-                Log.d("GraphResponse", user.optString("email"));
-                Log.d("GraphResponse", user.optString("name"));
-                Log.d("GraphResponse", user.optString("id"));
             }
         }).executeAsync();
     }

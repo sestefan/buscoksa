@@ -12,16 +12,6 @@
             android:id="@+id/nav_bookmarks"
             android:icon="@drawable/baseline_bookmarks_24"
             android:title="@string/bookmarks" />
-        <item
-            android:id="@+id/nav_login"
-            android:icon="@drawable/baseline_account_circle_24"
-            android:title="@string/login" />
-
-        <item
-            android:id="@+id/nav_logout"
-            android:icon="@drawable/baseline_account_circle_24"
-            android:title="@string/logout"
-            android:visible="false" />
 
         <item
             android:id="@+id/nav_search"
@@ -31,6 +21,16 @@
 
     <item android:title="@string/system">
         <menu>
+            <item
+                android:id="@+id/nav_login"
+                android:icon="@drawable/baseline_account_circle_24"
+                android:title="@string/login" />
+
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/baseline_account_circle_24"
+                android:title="@string/logout"
+                android:visible="false" />
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/baseline_settings_black_18"

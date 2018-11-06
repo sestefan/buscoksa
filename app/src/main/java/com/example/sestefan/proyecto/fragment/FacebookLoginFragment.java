@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.sestefan.proyecto.R;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -41,6 +43,14 @@ public class FacebookLoginFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         callbackManager = CallbackManager.Factory.create();
+        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                if (currentAccessToken == null) {
+                    fragmentEventListener.showLoginMenuItem();
+                }
+            }
+        };
     }
 
     @Override
@@ -66,7 +76,7 @@ public class FacebookLoginFragment extends Fragment {
 
             @Override
             public void onError(FacebookException error) {
-
+                fragmentEventListener.showLoginMenuItem();
             }
         });
         return v;
