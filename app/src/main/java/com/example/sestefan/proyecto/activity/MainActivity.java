@@ -26,6 +26,8 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FragmentEventListener {
 
     private Toolbar toolbar;
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (facebookLoginImageUrl != null && !facebookLoginImageUrl.isEmpty()) {
             Picasso.get().load(facebookLoginImageUrl).transform(new CropCircleTransformation()).into(imgFacebookLogin);
         } else {
-            Picasso.get().load(R.drawable.menu_header_img).into(imgFacebookLogin);
+            Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
         }
 
         GraphRequestAsyncTask request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
