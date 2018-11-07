@@ -24,10 +24,11 @@ public class FacebookLoginFragment extends Fragment {
 
     private static final String EMAIL = "email";
 
-    private FragmentEventListener fragmentEventListener;
+    private OnFragmentInteractionListener onFragmentInteractionListener;
 
     private CallbackManager callbackManager;
     private LoginButton loginButton;
+    private AccessTokenTracker accessTokenTracker;
 
 
     public FacebookLoginFragment() {
@@ -43,14 +44,15 @@ public class FacebookLoginFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         callbackManager = CallbackManager.Factory.create();
-        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+        accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
                 if (currentAccessToken == null) {
-                    fragmentEventListener.showLoginMenuItem();
+                    onFragmentInteractionListener.showLoginMenuItem();
                 }
             }
         };
+        accessTokenTracker.startTracking();
     }
 
     @Override
@@ -64,19 +66,19 @@ public class FacebookLoginFragment extends Fragment {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                fragmentEventListener.hideLoginMenuItem();
-                fragmentEventListener.showPostLoginFragment();
+                onFragmentInteractionListener.hideLoginMenuItem();
+                onFragmentInteractionListener.showPostLoginFragment();
             }
 
             @Override
             public void onCancel() {
-                fragmentEventListener.showLoginMenuItem();
+                onFragmentInteractionListener.showLoginMenuItem();
 
             }
 
             @Override
             public void onError(FacebookException error) {
-                fragmentEventListener.showLoginMenuItem();
+                onFragmentInteractionListener.showLoginMenuItem();
             }
         });
         return v;
@@ -85,11 +87,11 @@ public class FacebookLoginFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof FragmentEventListener) {
-            fragmentEventListener = (FragmentEventListener) context;
+        if (context instanceof OnFragmentInteractionListener) {
+            onFragmentInteractionListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement FragmentEventListener");
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -98,4 +100,19 @@ public class FacebookLoginFragment extends Fragment {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onDestroy() {
+        accessTokenTracker.stopTracking();
+        super.onDestroy();
+    }
+
+    public static interface OnFragmentInteractionListener {
+
+        void hideLoginMenuItem();
+
+        void showLoginMenuItem();
+
+        void showPostLoginFragment();
+
+    }
 }

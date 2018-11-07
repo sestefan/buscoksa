@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.example.sestefan.proyecto.R;
 import com.example.sestefan.proyecto.fragment.FacebookLoginFragment;
-import com.example.sestefan.proyecto.fragment.FragmentEventListener;
+import com.example.sestefan.proyecto.fragment.HelpFragment;
 import com.example.sestefan.proyecto.fragment.HomePageFragment;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -27,7 +27,7 @@ import org.json.JSONObject;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FragmentEventListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FacebookLoginFragment.OnFragmentInteractionListener, HomePageFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener {
 
     private static final String FACEBOOK_GRAPH_URL = "http://graph.facebook.com/{__USER_ID__}/picture?type=large";
 
@@ -72,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_login:
             case R.id.nav_logout:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, new FacebookLoginFragment()).addToBackStack(null).commit();
+                break;
+            case R.id.nav_help:
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, new HelpFragment()).addToBackStack(null).commit();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

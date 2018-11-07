@@ -1,5 +1,6 @@
 package com.example.sestefan.proyecto.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +27,7 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
     private RecyclerView recyclerView;
     private Houses houses;
     private HouseAdapter adapter;
+    private OnFragmentInteractionListener onFragmentInteractionListener;
 
     public HomePageFragment() {
         // Required empty public constructor
@@ -86,6 +88,21 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoaderReset(@NonNull Loader<Houses> loader) {
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof HomePageFragment.OnFragmentInteractionListener) {
+            onFragmentInteractionListener = (HomePageFragment.OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    public static interface OnFragmentInteractionListener {
 
     }
 }
