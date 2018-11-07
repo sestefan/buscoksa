@@ -13,23 +13,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sestefan.proyecto.R;
+import com.example.sestefan.proyecto.fragment.BookmarkFragment;
 import com.example.sestefan.proyecto.fragment.FacebookLoginFragment;
 import com.example.sestefan.proyecto.fragment.HelpFragment;
 import com.example.sestefan.proyecto.fragment.HomePageFragment;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
-import com.facebook.GraphRequestAsyncTask;
 import com.facebook.GraphResponse;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FacebookLoginFragment.OnFragmentInteractionListener, HomePageFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        FacebookLoginFragment.OnFragmentInteractionListener, HomePageFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener,
+        BookmarkFragment.OnFragmentInteractionListener {
 
     private static final String FACEBOOK_GRAPH_URL = "http://graph.facebook.com/{__USER_ID__}/picture?type=large";
+
+    private String sessionId;
 
     private Toolbar toolbar;
     private NavigationView navigationView;
@@ -73,6 +76,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_logout:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, new FacebookLoginFragment()).addToBackStack(null).commit();
                 break;
+            case R.id.nav_bookmarks:
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, new BookmarkFragment()).addToBackStack(null).commit();
+                break;
             case R.id.nav_help:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, new HelpFragment()).addToBackStack(null).commit();
                 break;
@@ -111,23 +117,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
         ImageView imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);
         TextView txtFacebookFullName = navigationView.getHeaderView(0).findViewById(R.id.fb_full_name);
+        // App code
+        GraphRequest request = GraphRequest.newMeRequest(
+                AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        try {
+                            String facebookLoginImageUrl = FACEBOOK_GRAPH_URL.replace("{__USER_ID__}", object.getString("id"));
+                            if (facebookLoginImageUrl != null && !facebookLoginImageUrl.isEmpty()) {
+                                Picasso.get().load(facebookLoginImageUrl).transform(new CropCircleTransformation()).into(imgFacebookLogin);
+                            } else {
+                                Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
+                            }
+                            txtFacebookFullName.setText(!object.getString("name").isEmpty() ? object.getString("name") : "You Know Who");
 
-        GraphRequestAsyncTask request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-            @Override
-            public void onCompleted(JSONObject user, GraphResponse graphResponse) {
-                try {
-                    String facebookLoginImageUrl = FACEBOOK_GRAPH_URL.replace("{__USER_ID__}", user.getString("id"));
-                    if (facebookLoginImageUrl != null && !facebookLoginImageUrl.isEmpty()) {
-                        Picasso.get().load(facebookLoginImageUrl).transform(new CropCircleTransformation()).into(imgFacebookLogin);
-                    } else {
-                        Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
+                            // Application code
+                            String email = object.getString("email");
+                        } catch (Exception e) {
+                            return;
+                        }
                     }
-                    txtFacebookFullName.setText(!user.getString("name").isEmpty() ? user.getString("name") : "You Know Who");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).executeAsync();
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email,gender,birthday");
+        request.setParameters(parameters);
+        request.executeAsync();
+
+//        GraphRequestAsyncTask request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+//            @Override
+//            public void onCompleted(JSONObject user, GraphResponse graphResponse) {
+//                try {
+//                    String facebookLoginImageUrl = FACEBOOK_GRAPH_URL.replace("{__USER_ID__}", user.getString("id"));
+//                    if (facebookLoginImageUrl != null && !facebookLoginImageUrl.isEmpty()) {
+//                        Picasso.get().load(facebookLoginImageUrl).transform(new CropCircleTransformation()).into(imgFacebookLogin);
+//                    } else {
+//                        Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
+//                    }
+//                    txtFacebookFullName.setText(!user.getString("name").isEmpty() ? user.getString("name") : "You Know Who");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).executeAsync();
+    }
+
+    @Override
+    public void performLogin(String sessionId) {
+
     }
 
     private boolean isFacebookLoggedIn() {

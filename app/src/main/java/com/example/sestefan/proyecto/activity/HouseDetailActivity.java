@@ -53,16 +53,8 @@ public class HouseDetailActivity extends AppCompatActivity {
         chkBalcony = findViewById(R.id.chk_balcony);
         chkPlayground = findViewById(R.id.chk_playground);
 
-        ArrayList<Habitaciones> rooms = data.getHabitaciones();
-        int x = 0;
-        for (Habitaciones h : rooms) {
-            if (h.getInmuebleHabitacionNombre().equalsIgnoreCase("baños") || h.getInmuebleHabitacionNombre().equalsIgnoreCase("baño")) {
-                x = x + 1;
-            }
-        }
-
         txtRoom.setText(data.getInmuebleCantDormitorio());
-        txtBathroom.setText(String.valueOf(x));
+        txtBathroom.setText(getBathQty());
         txtDims.setText(data.getInmuebleMetrosCuadrados());
         txtTitle.setText(data.getInmuebleTitulo());
 
@@ -81,5 +73,15 @@ public class HouseDetailActivity extends AppCompatActivity {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
 
+    }
+
+    private String getBathQty() {
+        ArrayList<Habitaciones> rooms = data.getHabitaciones();
+        for (Habitaciones h : rooms) {
+            if (h.getInmuebleHabitacionNombre().equalsIgnoreCase("baños") || h.getInmuebleHabitacionNombre().equalsIgnoreCase("baño")) {
+                return h.getInmuebleHabitacionCantidad();
+            }
+        }
+        return "0";
     }
 }
