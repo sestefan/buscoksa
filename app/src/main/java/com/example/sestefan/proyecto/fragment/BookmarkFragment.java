@@ -93,7 +93,7 @@ public class BookmarkFragment extends Fragment implements LoaderManager.LoaderCa
     @NonNull
     @Override
     public Loader<Houses> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new BookmarkTask(getContext());
+        return new BookmarkTask(getContext(), "");
     }
 
     @Override

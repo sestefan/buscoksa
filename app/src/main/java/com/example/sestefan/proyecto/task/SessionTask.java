@@ -5,11 +5,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.AsyncTaskLoader;
 
-import com.example.sestefan.proyecto.util.NetworkUtils;
+import com.example.sestefan.proyecto.api.UserHouseRepository;
+import com.example.sestefan.proyecto.domain.User;
 
-import org.json.JSONObject;
-
-public class SessionTask extends AsyncTaskLoader<JSONObject> {
+public class SessionTask extends AsyncTaskLoader<User> {
 
     private String token;
 
@@ -25,11 +24,11 @@ public class SessionTask extends AsyncTaskLoader<JSONObject> {
 
     @Nullable
     @Override
-    public JSONObject loadInBackground() {
+    public User loadInBackground() {
 
-        NetworkUtils networkUtils = new NetworkUtils();
+        UserHouseRepository userHouseRepository = new UserHouseRepository();
 
-        return networkUtils.getSession(token);
+        return userHouseRepository.getSession(token);
     }
 
 

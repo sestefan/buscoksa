@@ -32,7 +32,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static final String FACEBOOK_GRAPH_URL = "http://graph.facebook.com/{__USER_ID__}/picture?type=large";
 
-    private String sessionId;
+    private String facebookSessionId;
+    private String facebookEmail;
 
     private Toolbar toolbar;
     private NavigationView navigationView;
@@ -124,7 +125,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         try {
-                            String facebookLoginImageUrl = FACEBOOK_GRAPH_URL.replace("{__USER_ID__}", object.getString("id"));
+                            facebookSessionId = object.getString("id");
+                            String facebookLoginImageUrl = FACEBOOK_GRAPH_URL.replace("{__USER_ID__}", facebookSessionId);
                             if (facebookLoginImageUrl != null && !facebookLoginImageUrl.isEmpty()) {
                                 Picasso.get().load(facebookLoginImageUrl).transform(new CropCircleTransformation()).into(imgFacebookLogin);
                             } else {
@@ -133,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             txtFacebookFullName.setText(!object.getString("name").isEmpty() ? object.getString("name") : "You Know Who");
 
                             // Application code
-                            String email = object.getString("email");
+                            facebookEmail = object.getString("email");
                         } catch (Exception e) {
                             return;
                         }
@@ -143,27 +145,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         parameters.putString("fields", "id,name,email,gender,birthday");
         request.setParameters(parameters);
         request.executeAsync();
-
-//        GraphRequestAsyncTask request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-//            @Override
-//            public void onCompleted(JSONObject user, GraphResponse graphResponse) {
-//                try {
-//                    String facebookLoginImageUrl = FACEBOOK_GRAPH_URL.replace("{__USER_ID__}", user.getString("id"));
-//                    if (facebookLoginImageUrl != null && !facebookLoginImageUrl.isEmpty()) {
-//                        Picasso.get().load(facebookLoginImageUrl).transform(new CropCircleTransformation()).into(imgFacebookLogin);
-//                    } else {
-//                        Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
-//                    }
-//                    txtFacebookFullName.setText(!user.getString("name").isEmpty() ? user.getString("name") : "You Know Who");
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).executeAsync();
-    }
-
-    @Override
-    public void performLogin(String sessionId) {
 
     }
 

@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.AsyncTaskLoader;
 
+import com.example.sestefan.proyecto.api.HousesRepository;
 import com.example.sestefan.proyecto.domain.Houses;
-import com.example.sestefan.proyecto.util.NetworkUtils;
 
 public class HouseTask extends AsyncTaskLoader<Houses> {
 
@@ -23,8 +23,10 @@ public class HouseTask extends AsyncTaskLoader<Houses> {
     @Override
     public Houses loadInBackground() {
 
-        NetworkUtils networkUtils = new NetworkUtils();
+        HousesRepository housesRepository = new HousesRepository();
 
-        return networkUtils.homeSearch();
+        Houses house = housesRepository.homeSearch();
+
+        return house;
     }
 }

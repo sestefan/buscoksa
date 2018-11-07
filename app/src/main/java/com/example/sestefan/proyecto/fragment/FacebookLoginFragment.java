@@ -114,7 +114,5 @@ public class FacebookLoginFragment extends Fragment {
 
         void showPostLoginFragment();
 
-        void performLogin(String sessionId);
-
     }
 }

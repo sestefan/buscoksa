@@ -5,12 +5,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.AsyncTaskLoader;
 
-import com.example.sestefan.proyecto.util.NetworkUtils;
+import com.example.sestefan.proyecto.api.EmptyHouseRepository;
+import com.example.sestefan.proyecto.domain.EmptyResponse;
 
-public class SaveBookmarkTask extends AsyncTaskLoader<Boolean> {
+public class SaveBookmarkTask extends AsyncTaskLoader<EmptyResponse> {
 
-    public SaveBookmarkTask(@NonNull Context context) {
+    private String token;
+
+    private int houseId;
+
+    public SaveBookmarkTask(@NonNull Context context, String token, int houseId) {
         super(context);
+        this.token = token;
+        this.houseId = houseId;
     }
 
     @Override
@@ -20,10 +27,10 @@ public class SaveBookmarkTask extends AsyncTaskLoader<Boolean> {
 
     @Nullable
     @Override
-    public Boolean loadInBackground() {
+    public EmptyResponse loadInBackground() {
 
-        NetworkUtils networkUtils = new NetworkUtils();
+        EmptyHouseRepository emptyHouseRepository = new EmptyHouseRepository();
 
-        return networkUtils.bookmarkSave("", 1);
+        return emptyHouseRepository.bookmarkSave(token, houseId);
     }
 }
