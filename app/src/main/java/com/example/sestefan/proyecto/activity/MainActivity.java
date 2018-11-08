@@ -17,6 +17,7 @@ import com.example.sestefan.proyecto.fragment.BookmarkFragment;
 import com.example.sestefan.proyecto.fragment.FacebookLoginFragment;
 import com.example.sestefan.proyecto.fragment.HelpFragment;
 import com.example.sestefan.proyecto.fragment.HomePageFragment;
+import com.example.sestefan.proyecto.fragment.HouseDetailFragment;
 import com.example.sestefan.proyecto.fragment.TermsAndCondsFragment;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -29,7 +30,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         FacebookLoginFragment.OnFragmentInteractionListener, HomePageFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener,
-        BookmarkFragment.OnFragmentInteractionListener, TermsAndCondsFragment.OnFragmentInteractionListener {
+        BookmarkFragment.OnFragmentInteractionListener, TermsAndCondsFragment.OnFragmentInteractionListener, HouseDetailFragment.OnFragmentInteractionListener {
 
     private static final String FACEBOOK_GRAPH_URL = "http://graph.facebook.com/{__USER_ID__}/picture?type=large";
 
@@ -140,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                             // Application code
                             facebookEmail = object.getString("email");
+
                         } catch (Exception e) {
                             return;
                         }

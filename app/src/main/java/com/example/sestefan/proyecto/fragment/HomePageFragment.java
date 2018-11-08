@@ -1,7 +1,6 @@
 package com.example.sestefan.proyecto.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.sestefan.proyecto.R;
-import com.example.sestefan.proyecto.activity.HouseDetailActivity;
 import com.example.sestefan.proyecto.domain.Houses;
 import com.example.sestefan.proyecto.domain.Response;
 import com.example.sestefan.proyecto.recycler_view.RecyclerViewClickListener;
@@ -55,9 +53,7 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
 
         RecyclerViewClickListener adapterI = (view, position) -> {
             Response element = houses.getResponse().get(position);
-            Intent wonderDetailActivityIntent = new Intent(getContext(), HouseDetailActivity.class);
-            wonderDetailActivityIntent.putExtra(HouseDetailActivity.EXTRA_DATA, element);
-            startActivity(wonderDetailActivityIntent);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HouseDetailFragment.newInstance(element)).addToBackStack(null).commit();
             adapter.notifyDataSetChanged();
         };
         adapter = new HouseAdapter(getContext(), houses, adapterI);
