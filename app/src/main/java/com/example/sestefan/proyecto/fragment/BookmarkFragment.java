@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.sestefan.proyecto.R;
-import com.example.sestefan.proyecto.activity.HouseDetailActivity;
 import com.example.sestefan.proyecto.domain.Houses;
 import com.example.sestefan.proyecto.domain.Response;
 import com.example.sestefan.proyecto.recycler_view.RecyclerViewClickListener;
@@ -55,9 +54,9 @@ public class BookmarkFragment extends Fragment implements LoaderManager.LoaderCa
 
         RecyclerViewClickListener adapterI = (view, position) -> {
             Response element = houses.getResponse().get(position);
-            Intent wonderDetailActivityIntent = new Intent(getContext(), HouseDetailActivity.class);
-            wonderDetailActivityIntent.putExtra(HouseDetailActivity.EXTRA_DATA, element);
-            startActivity(wonderDetailActivityIntent);
+//            Intent wonderDetailActivityIntent = new Intent(getContext(), HouseDetailActivity.class);
+//            wonderDetailActivityIntent.putExtra(HouseDetailActivity.EXTRA_DATA, element);
+//            startActivity(wonderDetailActivityIntent);
             adapter.notifyDataSetChanged();
         };
         adapter = new HouseAdapter(getContext(), houses, adapterI);
