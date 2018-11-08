@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.AsyncTaskLoader;
 
-import com.example.sestefan.proyecto.api.UserHouseRepository;
+import com.example.sestefan.proyecto.api.HouseRepository;
 import com.example.sestefan.proyecto.domain.User;
 
 public class SessionTask extends AsyncTaskLoader<User> {
@@ -26,9 +26,9 @@ public class SessionTask extends AsyncTaskLoader<User> {
     @Override
     public User loadInBackground() {
 
-        UserHouseRepository userHouseRepository = new UserHouseRepository();
+        HouseRepository houseRepository = new HouseRepository();
 
-        return userHouseRepository.getSession(token);
+        return houseRepository.getSession(token);
     }
 
 

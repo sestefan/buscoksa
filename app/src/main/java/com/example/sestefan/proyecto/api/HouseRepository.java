@@ -3,7 +3,9 @@ package com.example.sestefan.proyecto.api;
 import android.net.Uri;
 
 import com.example.sestefan.proyecto.domain.EmptyResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.sestefan.proyecto.domain.Houses;
+import com.example.sestefan.proyecto.domain.User;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,7 +35,7 @@ public class HouseRepository {
     private BufferedReader reader = null;
 
     public EmptyResponse logIn(String token, String email) {
-        JSONObject body = null;
+        JSONObject body;
         try {
             body = new JSONObject().put("email", email);
         } catch (JSONException e) {
@@ -41,16 +43,15 @@ public class HouseRepository {
             return null;
         }
         JSONObject result = doPost(BASE_URL + LOGIN, body, token);
-        ObjectMapper objectMapper = new ObjectMapper();
-        EmptyResponse response = objectMapper.readValue(result.getString().getBytes(), EmptyResponse.class);
-        return response;
+        return new Gson().fromJson(result.toString(), EmptyResponse.class);
     }
 
-    public ResponseType getSession(String token) {
-        return doPost(BASE_URL + OBTENER_SESION, new JSONObject(), token);
+    public User getSession(String token) {
+        JSONObject result = doPost(BASE_URL + OBTENER_SESION, new JSONObject(), token);
+        return new Gson().fromJson(result.toString(), User.class);
     }
 
-    public ResponseType homeSearch() {
+    public Houses homeSearch() {
 
         JSONObject body = new JSONObject();
         try {
@@ -62,28 +63,30 @@ public class HouseRepository {
             body.put("TieneGarage", "");
             body.put("TieneBalcon", "");
             body.put("TienePatio", "");
-            return doPost(BASE_URL + BUSCAR_INMUEBLE, body, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
-
-    public ResponseType bookmarkSearch(String token) {
-        return doPost(BASE_URL + LISTADO_FAVORITOS, new JSONObject(), token);
-    }
-
-    public ResponseType bookmarkSave(String token, int houseId) {
-        JSONObject body = new JSONObject();
-        try {
-            body.put("InmuebleId", houseId);
-            return doPost(BASE_URL + GUARDAR_FAVORITO, body, token);
+            JSONObject result = doPost(BASE_URL + BUSCAR_INMUEBLE, body, null);
+            return new Gson().fromJson(result.toString(), Houses.class);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
+
+    public Houses bookmarkSearch(String token) {
+        JSONObject result = doPost(BASE_URL + LISTADO_FAVORITOS, new JSONObject(), token);
+        return new Gson().fromJson(result.toString(), Houses.class);
+    }
+
+
+//    public ResponseType bookmarkSave(String token, int houseId) {
+//        JSONObject body = new JSONObject();
+//        try {
+//            body.put("InmuebleId", houseId);
+//            return doPost(BASE_URL + GUARDAR_FAVORITO, body, token);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
     private JSONObject doPost(String url, JSONObject body, String token) {
 
