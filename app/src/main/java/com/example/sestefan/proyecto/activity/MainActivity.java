@@ -17,6 +17,7 @@ import com.example.sestefan.proyecto.fragment.BookmarkFragment;
 import com.example.sestefan.proyecto.fragment.FacebookLoginFragment;
 import com.example.sestefan.proyecto.fragment.HelpFragment;
 import com.example.sestefan.proyecto.fragment.HomePageFragment;
+import com.example.sestefan.proyecto.fragment.TermsAndCondsFragment;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -28,7 +29,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         FacebookLoginFragment.OnFragmentInteractionListener, HomePageFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener,
-        BookmarkFragment.OnFragmentInteractionListener {
+        BookmarkFragment.OnFragmentInteractionListener, TermsAndCondsFragment.OnFragmentInteractionListener {
 
     private static final String FACEBOOK_GRAPH_URL = "http://graph.facebook.com/{__USER_ID__}/picture?type=large";
 
@@ -82,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_help:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, new HelpFragment()).addToBackStack(null).commit();
+                break;
+            case R.id.nav_terms_conds:
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, new TermsAndCondsFragment()).addToBackStack(null).commit();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

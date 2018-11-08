@@ -64,6 +64,7 @@ public class HelpFragment extends Fragment {
         MediaController mediaController = new MediaController(getContext());
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
+        videoView.start();
         return v;
     }
 
