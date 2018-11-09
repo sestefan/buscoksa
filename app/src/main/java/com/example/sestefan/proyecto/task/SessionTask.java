@@ -30,9 +30,14 @@ public class SessionTask extends AsyncTaskLoader<User> {
 
         HouseRepository houseRepository = new HouseRepository();
 
-        houseRepository.logIn(token, email);
+        User session = houseRepository.getSession(token);
 
-        return houseRepository.getSession(token);
+        if (session.getUsuarioNombre().isEmpty()) {
+            houseRepository.logIn(token, email);
+            session.setUsuarioNombre(email);
+        }
+
+        return session;
     }
 
 

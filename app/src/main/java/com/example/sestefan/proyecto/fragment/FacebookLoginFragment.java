@@ -48,6 +48,7 @@ public class FacebookLoginFragment extends Fragment {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
                 if (currentAccessToken == null) {
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance()).addToBackStack(null).commit();
                     onFragmentInteractionListener.showLoginMenuItem();
                 }
             }

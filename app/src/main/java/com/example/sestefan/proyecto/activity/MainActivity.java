@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
@@ -42,6 +43,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String facebookSessionId;
     private String facebookEmail;
 
+    ImageView imgFacebookLogin;
+
+    TextView txtFacebookFullName;
+
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
@@ -65,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (isFacebookLoggedIn()) {
             hideLoginMenuItem();
             showPostLoginFragment();
+            return;
         } else {
             if (navigationView.getMenu().findItem(R.id.nav_bookmarks).isVisible()) {
                 navigationView.getMenu().findItem(R.id.nav_bookmarks).setVisible(false);
@@ -78,14 +84,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+                    fragmentManager.popBackStack();
+                }
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance()).commit();
                 break;
             case R.id.nav_login:
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, new FacebookLoginFragment()).addToBackStack(null).commit();
+                break;
             case R.id.nav_logout:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, new FacebookLoginFragment()).addToBackStack(null).commit();
                 break;
             case R.id.nav_bookmarks:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, new BookmarkFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, BookmarkFragment.newInstance(facebookSessionId)).addToBackStack(null).commit();
                 break;
             case R.id.nav_help:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, new HelpFragment()).addToBackStack(null).commit();
@@ -119,16 +131,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
         navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_bookmarks).setVisible(false);
+        facebookEmail = null;
+        facebookSessionId = null;
+        txtFacebookFullName.setText("");
+        imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);
+        Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
     }
 
     @Override
     public void showPostLoginFragment() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance()).commit();
         navigationView.getMenu().findItem(R.id.nav_login).setChecked(false);
         navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
-        ImageView imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);
-        TextView txtFacebookFullName = navigationView.getHeaderView(0).findViewById(R.id.fb_full_name);
-        // App code
+        imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);
+        txtFacebookFullName = navigationView.getHeaderView(0).findViewById(R.id.fb_full_name);
+
         GraphRequest request = GraphRequest.newMeRequest(
                 AccessToken.getCurrentAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
@@ -147,6 +163,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             // Application code
                             facebookEmail = object.getString("email");
 
+                            Bundle queryBundle = new Bundle();
+                            getSupportLoaderManager().restartLoader(0, queryBundle, MainActivity.this);
+
+                            if (getSupportLoaderManager().getLoader(0) != null) {
+                                getSupportLoaderManager().initLoader(0, null, MainActivity.this);
+                            }
+
                         } catch (Exception e) {
                             return;
                         }
@@ -156,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         parameters.putString("fields", "id,name,email,gender,birthday");
         request.setParameters(parameters);
         request.executeAsync();
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance()).commit();
     }
 
     private boolean isFacebookLoggedIn() {
@@ -173,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onLoadFinished(@NonNull Loader<User> loader, User user) {
-        return;
 
     }
 

@@ -1,7 +1,6 @@
 package com.example.sestefan.proyecto.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,9 +23,13 @@ import com.example.sestefan.proyecto.task.BookmarkTask;
 //TODO: Hacer Heredar la clase de HomeFragment y cambiar las propiedades del padre que correspondan a protected
 public class BookmarkFragment extends Fragment implements LoaderManager.LoaderCallbacks<Houses> {
 
+    private static final String TOKEN = "token";
+
     private RecyclerView recyclerView;
     private Houses houses;
     private HouseAdapter adapter;
+
+    private String token;
 
     private OnFragmentInteractionListener onFragmentInteractionListener;
 
@@ -34,14 +37,20 @@ public class BookmarkFragment extends Fragment implements LoaderManager.LoaderCa
         // Required empty public constructor
     }
 
-    public static BookmarkFragment newInstance() {
+    public static BookmarkFragment newInstance(String token) {
         BookmarkFragment fragment = new BookmarkFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(TOKEN, token);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            token = getArguments().getString("token");
+        }
     }
 
     @Override
@@ -54,9 +63,7 @@ public class BookmarkFragment extends Fragment implements LoaderManager.LoaderCa
 
         RecyclerViewClickListener adapterI = (view, position) -> {
             Response element = houses.getResponse().get(position);
-//            Intent wonderDetailActivityIntent = new Intent(getContext(), HouseDetailActivity.class);
-//            wonderDetailActivityIntent.putExtra(HouseDetailActivity.EXTRA_DATA, element);
-//            startActivity(wonderDetailActivityIntent);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HouseDetailFragment.newInstance(element)).addToBackStack(null).commit();
             adapter.notifyDataSetChanged();
         };
         adapter = new HouseAdapter(getContext(), houses, adapterI);
@@ -92,7 +99,7 @@ public class BookmarkFragment extends Fragment implements LoaderManager.LoaderCa
     @NonNull
     @Override
     public Loader<Houses> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new BookmarkTask(getContext(), "");
+        return new BookmarkTask(getContext(), token);
     }
 
     @Override

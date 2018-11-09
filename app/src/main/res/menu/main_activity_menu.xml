@@ -4,23 +4,23 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/baseline_home_24"
-            android:title="@string/home" />
-        <item
-            android:id="@+id/nav_bookmarks"
-            android:icon="@drawable/baseline_bookmarks_24"
-            android:title="@string/bookmarks" />
+        <item android:title="algo">
+            <item
+                android:id="@+id/nav_home"
+                android:icon="@drawable/baseline_home_24"
+                android:title="@string/home" />
+            <item
+                android:id="@+id/nav_bookmarks"
+                android:icon="@drawable/icons8_heart_24"
+                android:title="@string/bookmarks" />
 
-        <item
-            android:id="@+id/nav_search"
-            android:icon="@drawable/baseline_search_24"
-            android:title="@string/search" />
-    </group>
+            <item
+                android:id="@+id/nav_search"
+                android:icon="@drawable/baseline_search_24"
+                android:title="@string/search" />
+        </item>
 
-    <item android:title="@string/system">
-        <menu>
+        <item android:title="@string/system">
             <item
                 android:id="@+id/nav_login"
                 android:icon="@drawable/baseline_account_circle_24"
@@ -43,7 +43,7 @@
                 android:id="@+id/nav_help"
                 android:icon="@drawable/baseline_help_24"
                 android:title="@string/help" />
-        </menu>
-    </item>
+        </item>
+    </group>
 
 </menu>
