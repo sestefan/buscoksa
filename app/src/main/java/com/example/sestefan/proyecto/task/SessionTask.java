@@ -11,10 +11,12 @@ import com.example.sestefan.proyecto.domain.User;
 public class SessionTask extends AsyncTaskLoader<User> {
 
     private String token;
+    private String email;
 
-    public SessionTask(@NonNull Context context, String token) {
+    public SessionTask(@NonNull Context context, String token, String email) {
         super(context);
         this.token = token;
+        this.email = email;
     }
 
     @Override
@@ -27,6 +29,8 @@ public class SessionTask extends AsyncTaskLoader<User> {
     public User loadInBackground() {
 
         HouseRepository houseRepository = new HouseRepository();
+
+        houseRepository.logIn(token, email);
 
         return houseRepository.getSession(token);
     }

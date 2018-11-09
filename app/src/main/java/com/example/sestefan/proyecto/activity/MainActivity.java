@@ -2,7 +2,10 @@ package com.example.sestefan.proyecto.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,12 +16,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sestefan.proyecto.R;
+import com.example.sestefan.proyecto.domain.User;
 import com.example.sestefan.proyecto.fragment.BookmarkFragment;
 import com.example.sestefan.proyecto.fragment.FacebookLoginFragment;
 import com.example.sestefan.proyecto.fragment.HelpFragment;
 import com.example.sestefan.proyecto.fragment.HomePageFragment;
 import com.example.sestefan.proyecto.fragment.HouseDetailFragment;
 import com.example.sestefan.proyecto.fragment.TermsAndCondsFragment;
+import com.example.sestefan.proyecto.task.SessionTask;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -28,7 +33,7 @@ import org.json.JSONObject;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<User>,
         FacebookLoginFragment.OnFragmentInteractionListener, HomePageFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener,
         BookmarkFragment.OnFragmentInteractionListener, TermsAndCondsFragment.OnFragmentInteractionListener, HouseDetailFragment.OnFragmentInteractionListener {
 
@@ -157,6 +162,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean isFacebookLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         return accessToken != null && !accessToken.isExpired();
+
+    }
+
+    @NonNull
+    @Override
+    public Loader<User> onCreateLoader(int i, @Nullable Bundle bundle) {
+        return new SessionTask(this, facebookSessionId, facebookEmail);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<User> loader, User user) {
+        return;
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<User> loader) {
 
     }
 }
