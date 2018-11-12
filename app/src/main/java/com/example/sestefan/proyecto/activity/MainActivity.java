@@ -91,19 +91,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance()).commit();
                 break;
             case R.id.nav_login:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, new FacebookLoginFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, FacebookLoginFragment.newInstance()).addToBackStack(null).commit();
                 break;
             case R.id.nav_logout:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, new FacebookLoginFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, FacebookLoginFragment.newInstance()).addToBackStack(null).commit();
                 break;
             case R.id.nav_bookmarks:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, BookmarkFragment.newInstance(facebookSessionId)).addToBackStack(null).commit();
                 break;
             case R.id.nav_help:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, new HelpFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, HelpFragment.newInstance()).addToBackStack(null).commit();
                 break;
             case R.id.nav_terms_conds:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, new TermsAndCondsFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, TermsAndCondsFragment.newInstance()).addToBackStack(null).commit();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -147,32 +147,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         GraphRequest request = GraphRequest.newMeRequest(
                 AccessToken.getCurrentAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        try {
-                            facebookSessionId = object.getString("id");
-                            String facebookLoginImageUrl = FACEBOOK_GRAPH_URL.replace("{__USER_ID__}", facebookSessionId);
-                            if (facebookLoginImageUrl != null && !facebookLoginImageUrl.isEmpty()) {
-                                Picasso.get().load(facebookLoginImageUrl).transform(new CropCircleTransformation()).into(imgFacebookLogin);
-                            } else {
-                                Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
-                            }
-                            txtFacebookFullName.setText(!object.getString("name").isEmpty() ? object.getString("name") : "You Know Who");
-
-                            // Application code
-                            facebookEmail = object.getString("email");
-
-                            Bundle queryBundle = new Bundle();
-                            getSupportLoaderManager().restartLoader(0, queryBundle, MainActivity.this);
-
-                            if (getSupportLoaderManager().getLoader(0) != null) {
-                                getSupportLoaderManager().initLoader(0, null, MainActivity.this);
-                            }
-
-                        } catch (Exception e) {
-                            return;
+                (JSONObject object, GraphResponse response) -> {
+                    try {
+                        facebookSessionId = object.getString("id");
+                        String facebookLoginImageUrl = FACEBOOK_GRAPH_URL.replace("{__USER_ID__}", facebookSessionId);
+                        if (facebookLoginImageUrl != null && !facebookLoginImageUrl.isEmpty()) {
+                            Picasso.get().load(facebookLoginImageUrl).transform(new CropCircleTransformation()).into(imgFacebookLogin);
+                        } else {
+                            Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
                         }
+                        txtFacebookFullName.setText(!object.getString("name").isEmpty() ? object.getString("name") : "You Know Who");
+
+                        // Application code
+                        facebookEmail = object.getString("email");
+
+                        Bundle queryBundle = new Bundle();
+                        getSupportLoaderManager().restartLoader(0, queryBundle, MainActivity.this);
+
+                        if (getSupportLoaderManager().getLoader(0) != null) {
+                            getSupportLoaderManager().initLoader(0, null, MainActivity.this);
+                        }
+
+                    } catch (Exception e) {
+                        return;
                     }
                 });
         Bundle parameters = new Bundle();
