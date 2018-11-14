@@ -2,11 +2,8 @@ package com.example.sestefan.proyecto.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,31 +14,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sestefan.proyecto.R;
-import com.example.sestefan.proyecto.domain.User;
 import com.example.sestefan.proyecto.fragment.BookmarkFragment;
 import com.example.sestefan.proyecto.fragment.FacebookLoginFragment;
 import com.example.sestefan.proyecto.fragment.HelpFragment;
 import com.example.sestefan.proyecto.fragment.HomePageFragment;
 import com.example.sestefan.proyecto.fragment.HouseDetailFragment;
 import com.example.sestefan.proyecto.fragment.TermsAndCondsFragment;
-import com.example.sestefan.proyecto.task.SessionTask;
+import com.example.sestefan.proyecto.util.facebook.FacebookLoginHelper;
 import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONObject;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<User>,
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         FacebookLoginFragment.OnFragmentInteractionListener, HomePageFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener,
         BookmarkFragment.OnFragmentInteractionListener, TermsAndCondsFragment.OnFragmentInteractionListener, HouseDetailFragment.OnFragmentInteractionListener {
 
-    private static final String FACEBOOK_GRAPH_URL = "http://graph.facebook.com/{__USER_ID__}/picture?type=large";
-
-    private String facebookSessionId;
-    private String facebookEmail;
+    private FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto;
 
     ImageView imgFacebookLogin;
 
@@ -68,8 +57,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         if (isFacebookLoggedIn()) {
-            hideLoginMenuItem();
-            showPostLoginFragment();
+            FacebookLoginHelper.getFacebookInfo(AccessToken.getCurrentAccessToken(), new FacebookLoginHelper.FacebookLoginHelperCallback() {
+                @Override
+                public void getInfo(String id, String name, String email, String imageUrl) {
+                    facebookLoginHelperDto = new FacebookLoginHelper.FacebookLoginHelperDto(id, name, email, imageUrl);
+                    showPostLoginFragment(facebookLoginHelperDto);
+                }
+            });
             return;
         } else {
             if (navigationView.getMenu().findItem(R.id.nav_bookmarks).isVisible()) {
@@ -97,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, FacebookLoginFragment.newInstance()).addToBackStack(null).commit();
                 break;
             case R.id.nav_bookmarks:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, BookmarkFragment.newInstance(facebookSessionId)).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, BookmarkFragment.newInstance(facebookLoginHelperDto.getId())).addToBackStack(null).commit();
                 break;
             case R.id.nav_help:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, HelpFragment.newInstance()).addToBackStack(null).commit();
@@ -120,84 +114,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void hideLoginMenuItem() {
-        navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
-        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
-        navigationView.getMenu().findItem(R.id.nav_bookmarks).setVisible(true);
-    }
-
-    @Override
     public void showLoginMenuItem() {
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
         navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_bookmarks).setVisible(false);
-        facebookEmail = null;
-        facebookSessionId = null;
+        facebookLoginHelperDto = null;
         txtFacebookFullName.setText("");
         imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);
         Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
     }
 
     @Override
-    public void showPostLoginFragment() {
+    public void showPostLoginFragment(FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto) {
+        navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
+        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
+        navigationView.getMenu().findItem(R.id.nav_bookmarks).setVisible(true);
         navigationView.getMenu().findItem(R.id.nav_login).setChecked(false);
         navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
         imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);
         txtFacebookFullName = navigationView.getHeaderView(0).findViewById(R.id.fb_full_name);
 
-        GraphRequest request = GraphRequest.newMeRequest(
-                AccessToken.getCurrentAccessToken(),
-                (JSONObject object, GraphResponse response) -> {
-                    try {
-                        facebookSessionId = object.getString("id");
-                        String facebookLoginImageUrl = FACEBOOK_GRAPH_URL.replace("{__USER_ID__}", facebookSessionId);
-                        if (facebookLoginImageUrl != null && !facebookLoginImageUrl.isEmpty()) {
-                            Picasso.get().load(facebookLoginImageUrl).transform(new CropCircleTransformation()).into(imgFacebookLogin);
-                        } else {
-                            Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
-                        }
-                        txtFacebookFullName.setText(!object.getString("name").isEmpty() ? object.getString("name") : "You Know Who");
-
-                        // Application code
-                        facebookEmail = object.getString("email");
-
-                        Bundle queryBundle = new Bundle();
-                        getSupportLoaderManager().restartLoader(0, queryBundle, MainActivity.this);
-
-                        if (getSupportLoaderManager().getLoader(0) != null) {
-                            getSupportLoaderManager().initLoader(0, null, MainActivity.this);
-                        }
-
-                    } catch (Exception e) {
-                        return;
-                    }
-                });
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,email,gender,birthday");
-        request.setParameters(parameters);
-        request.executeAsync();
+        String facebookLoginImageUrl = facebookLoginHelperDto.getImageUrl();
+        if (facebookLoginImageUrl != null && !facebookLoginImageUrl.isEmpty()) {
+            Picasso.get().load(facebookLoginImageUrl).transform(new CropCircleTransformation()).into(imgFacebookLogin);
+        } else {
+            Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
+        }
+        txtFacebookFullName.setText("Bienvenido " + facebookLoginHelperDto.getName());
         getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance()).commit();
     }
 
     private boolean isFacebookLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         return accessToken != null && !accessToken.isExpired();
-
     }
 
-    @NonNull
-    @Override
-    public Loader<User> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new SessionTask(this, facebookSessionId, facebookEmail);
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<User> loader, User user) {
-
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<User> loader) {
-
-    }
 }

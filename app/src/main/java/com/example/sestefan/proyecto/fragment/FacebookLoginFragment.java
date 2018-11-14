@@ -3,13 +3,19 @@ package com.example.sestefan.proyecto.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.sestefan.proyecto.R;
+import com.example.sestefan.proyecto.domain.User;
+import com.example.sestefan.proyecto.task.SessionTask;
+import com.example.sestefan.proyecto.util.facebook.FacebookLoginHelper;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -20,9 +26,11 @@ import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
 
-public class FacebookLoginFragment extends Fragment {
+public class FacebookLoginFragment extends Fragment implements LoaderManager.LoaderCallbacks<User> {
 
     private static final String EMAIL = "email";
+
+    private FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto;
 
     private OnFragmentInteractionListener onFragmentInteractionListener;
 
@@ -67,8 +75,19 @@ public class FacebookLoginFragment extends Fragment {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                onFragmentInteractionListener.hideLoginMenuItem();
-                onFragmentInteractionListener.showPostLoginFragment();
+                FacebookLoginHelper.getFacebookInfo(AccessToken.getCurrentAccessToken(), new FacebookLoginHelper.FacebookLoginHelperCallback() {
+                    @Override
+                    public void getInfo(String id, String name, String email, String imageUrl) {
+                        facebookLoginHelperDto = new FacebookLoginHelper.FacebookLoginHelperDto(id, name, email, imageUrl);
+                        Bundle queryBundle = new Bundle();
+                        getActivity().getSupportLoaderManager().restartLoader(0, queryBundle, FacebookLoginFragment.this);
+
+                        if (getActivity().getSupportLoaderManager().getLoader(0) != null) {
+                            getActivity().getSupportLoaderManager().initLoader(0, null, FacebookLoginFragment.this);
+                        }
+                        onFragmentInteractionListener.showPostLoginFragment(facebookLoginHelperDto);
+                    }
+                });
             }
 
             @Override
@@ -107,13 +126,27 @@ public class FacebookLoginFragment extends Fragment {
         super.onDestroy();
     }
 
-    public static interface OnFragmentInteractionListener {
+    @NonNull
+    @Override
+    public Loader<User> onCreateLoader(int i, @Nullable Bundle bundle) {
+        return new SessionTask(this.getContext(), facebookLoginHelperDto.getId(), facebookLoginHelperDto.getEmail());
+    }
 
-        void hideLoginMenuItem();
+    @Override
+    public void onLoadFinished(@NonNull Loader<User> loader, User user) {
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<User> loader) {
+
+    }
+
+    public interface OnFragmentInteractionListener {
 
         void showLoginMenuItem();
 
-        void showPostLoginFragment();
+        void showPostLoginFragment(FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto);
 
     }
+
 }
