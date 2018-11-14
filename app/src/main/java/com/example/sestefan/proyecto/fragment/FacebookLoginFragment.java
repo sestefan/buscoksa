@@ -75,18 +75,15 @@ public class FacebookLoginFragment extends Fragment implements LoaderManager.Loa
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                FacebookLoginHelper.getFacebookInfo(AccessToken.getCurrentAccessToken(), new FacebookLoginHelper.FacebookLoginHelperCallback() {
-                    @Override
-                    public void getInfo(String id, String name, String email, String imageUrl) {
-                        facebookLoginHelperDto = new FacebookLoginHelper.FacebookLoginHelperDto(id, name, email, imageUrl);
-                        Bundle queryBundle = new Bundle();
-                        getActivity().getSupportLoaderManager().restartLoader(0, queryBundle, FacebookLoginFragment.this);
+                FacebookLoginHelper.getFacebookInfo(AccessToken.getCurrentAccessToken(), (id, name, email, imageUrl) -> {
+                    facebookLoginHelperDto = new FacebookLoginHelper.FacebookLoginHelperDto(id, name, email, imageUrl);
+                    Bundle queryBundle = new Bundle();
+                    getActivity().getSupportLoaderManager().restartLoader(0, queryBundle, FacebookLoginFragment.this);
 
-                        if (getActivity().getSupportLoaderManager().getLoader(0) != null) {
-                            getActivity().getSupportLoaderManager().initLoader(0, null, FacebookLoginFragment.this);
-                        }
-                        onFragmentInteractionListener.showPostFacebookLogin(facebookLoginHelperDto);
+                    if (getActivity().getSupportLoaderManager().getLoader(0) != null) {
+                        getActivity().getSupportLoaderManager().initLoader(0, null, FacebookLoginFragment.this);
                     }
+                    onFragmentInteractionListener.showPostFacebookLogin(facebookLoginHelperDto);
                 });
             }
 

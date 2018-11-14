@@ -5,9 +5,6 @@ import android.os.Bundle;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-
-import org.json.JSONObject;
 
 public class FacebookLoginHelper {
 
@@ -25,18 +22,15 @@ public class FacebookLoginHelper {
 
         id = accessToken.toString();
 
-        GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
-            @Override
-            public void onCompleted(JSONObject object, GraphResponse response) {
+        GraphRequest request = GraphRequest.newMeRequest(accessToken, (object, response) -> {
 
-                try {
-                    name = !object.getString("name").isEmpty() ? object.getString("name") : "You Know Who";
-                    email = object.getString("email");
-                    imageUrl = FACEBOOK_GRAPH_URL.replace("{__USER_ID__}", object.getString("id"));
-                    callback.getInfo(id, name, email, imageUrl);
-                } catch (Exception e) {
-                    return;
-                }
+            try {
+                name = !object.getString("name").isEmpty() ? object.getString("name") : "You Know Who";
+                email = object.getString("email");
+                imageUrl = FACEBOOK_GRAPH_URL.replace("{__USER_ID__}", object.getString("id"));
+                callback.getInfo(id, name, email, imageUrl);
+            } catch (Exception e) {
+                return;
             }
         });
 

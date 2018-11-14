@@ -57,12 +57,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         if (isFacebookLoggedIn()) {
-            FacebookLoginHelper.getFacebookInfo(AccessToken.getCurrentAccessToken(), new FacebookLoginHelper.FacebookLoginHelperCallback() {
-                @Override
-                public void getInfo(String id, String name, String email, String imageUrl) {
-                    facebookLoginHelperDto = new FacebookLoginHelper.FacebookLoginHelperDto(id, name, email, imageUrl);
-                    showPostFacebookLogin(facebookLoginHelperDto);
-                }
+            FacebookLoginHelper.getFacebookInfo(AccessToken.getCurrentAccessToken(), (id, name, email, imageUrl) -> {
+                facebookLoginHelperDto = new FacebookLoginHelper.FacebookLoginHelperDto(id, name, email, imageUrl);
+                showPostFacebookLogin(facebookLoginHelperDto);
             });
             return;
         } else {
