@@ -31,4 +31,6 @@
     <string name="item_price">Price:</string>
     <string name="item_neighborhood">Neighborhood:</string>
     <string name="item_rooms">Rooms:</string>
+    <string name="search_title">Search</string>
+    <string name="search_filter">Filter</string>
 </resources>

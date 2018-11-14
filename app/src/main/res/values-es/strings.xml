@@ -31,4 +31,6 @@
     <string name="item_price">Precio:</string>
     <string name="item_neighborhood">Barrio:</string>
     <string name="item_rooms">Dormitorios:</string>
+    <string name="search_title">Buscar</string>
+    <string name="search_filter">Filtros</string>
 </resources>
