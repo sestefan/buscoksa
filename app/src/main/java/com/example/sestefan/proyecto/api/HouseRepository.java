@@ -51,7 +51,7 @@ public class HouseRepository {
         return new Gson().fromJson(result.toString(), User.class);
     }
 
-    public Houses homeSearch() {
+    public Houses homeSearch(String token) {
 
         JSONObject body = new JSONObject();
         try {
@@ -63,7 +63,7 @@ public class HouseRepository {
             body.put("TieneGarage", "");
             body.put("TieneBalcon", "");
             body.put("TienePatio", "");
-            JSONObject result = doPost(BASE_URL + BUSCAR_INMUEBLE, body, null);
+            JSONObject result = doPost(BASE_URL + BUSCAR_INMUEBLE, body, token);
             return new Gson().fromJson(result.toString(), Houses.class);
         } catch (Exception e) {
             e.printStackTrace();

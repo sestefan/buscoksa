@@ -66,7 +66,7 @@ public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCa
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HouseDetailFragment.newInstance(element)).addToBackStack(null).commit();
             adapter.notifyDataSetChanged();
         };
-        adapter = new HouseAdapter(getContext(), houses, adapterI);
+        adapter = new HouseAdapter(getContext(), houses, true, adapterI);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 

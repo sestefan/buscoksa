@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class FacebookLoginFragment extends Fragment implements LoaderManager.LoaderCallbacks<User> {
 
@@ -56,7 +58,11 @@ public class FacebookLoginFragment extends Fragment implements LoaderManager.Loa
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
                 if (currentAccessToken == null) {
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance()).addToBackStack(null).commit();
+                    FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+                        fragmentManager.popBackStack();
+                    }
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(false, null)).addToBackStack(null).commit();
                     onFragmentInteractionListener.showPostFacebookLogOut();
                 }
             }

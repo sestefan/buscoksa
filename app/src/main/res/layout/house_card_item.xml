@@ -64,6 +64,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/img_house"
             app:layout_constraintVertical_bias="0.155"
-            app:srcCompat="@drawable/icons8_heart_24" />
+            app:srcCompat="@drawable/baseline_favorite_border_white_24dp" />
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

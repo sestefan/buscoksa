@@ -22,25 +22,38 @@ import com.example.sestefan.proyecto.task.HouseTask;
 
 public class HomePageFragment extends Fragment implements LoaderManager.LoaderCallbacks<Houses> {
 
+    private static final String ARG_USER_LOGGED_IN = "arg_user_logged_in";
+    private static final String ARG_TOKEN = "token";
+
     private RecyclerView recyclerView;
     private Houses houses;
     private HouseAdapter adapter;
     private OnFragmentInteractionListener onFragmentInteractionListener;
 
+    private boolean isUserLoggedIn;
+
+    private String token;
+
     public HomePageFragment() {
         // Required empty public constructor
     }
 
-    public static HomePageFragment newInstance(/*set arguments*/) {
+    public static HomePageFragment newInstance(boolean isUserLoggedIn, String token) {
         HomePageFragment fragment = new HomePageFragment();
-//        Bundle args = new Bundle();
-//        fragment.setArguments(args);
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_USER_LOGGED_IN, isUserLoggedIn);
+        args.putString(ARG_TOKEN, token);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            isUserLoggedIn = getArguments().getBoolean(ARG_USER_LOGGED_IN);
+            token = getArguments().getString(ARG_TOKEN);
+        }
     }
 
     @Override
@@ -56,7 +69,7 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HouseDetailFragment.newInstance(element)).addToBackStack(null).commit();
             adapter.notifyDataSetChanged();
         };
-        adapter = new HouseAdapter(getContext(), houses, adapterI);
+        adapter = new HouseAdapter(getContext(), houses, isUserLoggedIn, adapterI);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -72,7 +85,7 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
     @NonNull
     @Override
     public Loader<Houses> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new HouseTask(getContext());
+        return new HouseTask(getContext(), token);
     }
 
     @Override

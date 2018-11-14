@@ -67,19 +67,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
             }
         }
-
-        getSupportFragmentManager().beginTransaction().add(R.id.container, HomePageFragment.newInstance()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto != null ? facebookLoginHelperDto.getId() : null)).commit();
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
+                //TODO: Ver como realizar esto cada vez que me lleva al home page.
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                     fragmentManager.popBackStack();
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto != null ? facebookLoginHelperDto.getId() : null)).commit();
                 break;
             case R.id.nav_login:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, FacebookLoginFragment.newInstance()).addToBackStack(null).commit();
@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         txtFacebookFullName.setText("");
         imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);
         Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
-
     }
 
     @Override
@@ -138,8 +137,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
         }
-        txtFacebookFullName.setText("Bienvenido " + facebookLoginHelperDto.getName());
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance()).commit();
+        txtFacebookFullName.setText(String.format("%s %s", getString(R.string.welcome), facebookLoginHelperDto.getName()));
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto.getId())).commit();
     }
 
     private boolean isFacebookLoggedIn() {

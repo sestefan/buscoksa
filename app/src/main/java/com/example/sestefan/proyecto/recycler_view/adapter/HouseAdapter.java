@@ -20,16 +20,17 @@ import java.util.ArrayList;
 
 public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHolder> {
 
-    private static final String DEFAULT_HOUSE_PIC_URL = "https://www.google.com.uy/imgres?imgurl=https%3A%2F%2Fwww.aashiyanaforme.com%2Fwp-content%2Fuploads%2F2017%2F10%2Fno-photo-available-12.jpg&imgrefurl=https%3A%2F%2Fwww.aashiyanaforme.com%2Fproperties%2F2-bhak-builder-floor-at-vikasnagar-2%2F&docid=d-uB6XUdM4mxlM&tbnid=vT6gen6KGB560M%3A&vet=10ahUKEwiHnfPVwrPeAhVEQZAKHWO4AxQQMwhaKBQwFA..i&w=440&h=330&itg=1&bih=994&biw=1919&q=no%20image%20default%20%20photo&ved=0ahUKEwiHnfPVwrPeAhVEQZAKHWO4AxQQMwhaKBQwFA&iact=mrc&uact=8";
-
     private Houses houses;
     private LayoutInflater inflater;
     private RecyclerViewClickListener listener;
 
-    public HouseAdapter(Context context, Houses houses, RecyclerViewClickListener listener) {
+    private boolean isUserLoggedIn;
+
+    public HouseAdapter(Context context, Houses houses, boolean isUserLoggedIn, RecyclerViewClickListener listener) {
         inflater = LayoutInflater.from(context);
         this.houses = houses;
         this.listener = listener;
+        this.isUserLoggedIn = isUserLoggedIn;
     }
 
     public void setResponses(Houses houses) {
@@ -41,20 +42,30 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHol
     public HouseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView;
         itemView = inflater.inflate(R.layout.house_card_item, parent, false);
-        return new HouseViewHolder(itemView, listener);
+        return new HouseViewHolder(itemView, listener, isUserLoggedIn);
     }
 
     @Override
     public void onBindViewHolder(@NonNull HouseViewHolder holder, int position) {
         Response current = houses.getResponse().get(position);
-        holder.getTxtPrice().setText("Price: " + current.getInmueblePrecio());
-        holder.getTxtNeighborhood().setText("Neighborhood: " + current.getInmuebleBarrio());
-        holder.getTxtRooms().setText("#rooms: " + current.getInmuebleCantDormitorio());
+        holder.getTxtPrice().setText(String.format("%s %s", inflater.getContext().getString(R.string.item_price), current.getInmueblePrecio()));
+        holder.getTxtNeighborhood().setText(String.format("%s %s", inflater.getContext().getString(R.string.item_neighborhood), current.getInmuebleBarrio()));
+        holder.getTxtRooms().setText(String.format("%s %s", inflater.getContext().getString(R.string.item_rooms), current.getInmuebleCantDormitorio()));
+        ImageView imgFavorite = holder.getImgFavorite();
         ArrayList<Fotos> images = current.getFotos();
         if (images != null && images.size() > 0) {
             Picasso.get().load(images.get(0).getInmuebleImagenUrl()).into(holder.getImgHouse());
         } else {
             Picasso.get().load(R.drawable.default_home).into(holder.getImgHouse());
+
+        }
+        if (holder.isUserLoggedIn()) {
+            if (current.isFavorito()) {
+                Picasso.get().load(R.drawable.baseline_favorite_white_24dp).into(holder.getImgFavorite());
+            }
+        } else {
+            imgFavorite.setEnabled(false);
+            imgFavorite.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -75,9 +86,13 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHol
 
         private final ImageView imgHouse;
 
+        private final ImageView imgFavorite;
+
         private RecyclerViewClickListener listener;
 
-        public HouseViewHolder(View itemView, RecyclerViewClickListener listener) {
+        private boolean isUserLoggedIn;
+
+        public HouseViewHolder(View itemView, RecyclerViewClickListener listener, boolean isUserLoggedIn) {
 
             super(itemView);
             itemView.setOnClickListener(this);
@@ -86,7 +101,9 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHol
             this.txtPrice = itemView.findViewById(R.id.txt_neighborhood);
             this.txtRooms = itemView.findViewById(R.id.txt_rooms);
             this.imgHouse = itemView.findViewById(R.id.img_house);
+            this.imgFavorite = itemView.findViewById(R.id.imgFavorite);
             this.listener = listener;
+            this.isUserLoggedIn = isUserLoggedIn;
         }
 
         @Override
@@ -109,6 +126,14 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHol
 
         public ImageView getImgHouse() {
             return imgHouse;
+        }
+
+        public ImageView getImgFavorite() {
+            return imgFavorite;
+        }
+
+        public boolean isUserLoggedIn() {
+            return isUserLoggedIn;
         }
     }
 }

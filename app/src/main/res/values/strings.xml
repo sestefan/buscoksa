@@ -19,12 +19,16 @@
     <string name="detail_bathrooms">#bathrooms</string>
     <string name="detail_garage">Garage</string>
     <string name="detail_mts">mts</string>
-    <string name="detail_balcony">Balcony</string>
-    <string name="detail_playground">playground</string>
-    <string name="detail_title">Title</string>
-    <string name="detail_barbecue">Barbecue</string>
+    <string name="detail_balcony">Balcony:</string>
+    <string name="detail_playground">playground:</string>
+    <string name="detail_title">Title:</string>
+    <string name="detail_barbecue">Barbecue:</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="logout">Logout</string>
+    <string name="welcome">Welcome</string>
+    <string name="item_price">Price:</string>
+    <string name="item_neighborhood">Neighborhood:</string>
+    <string name="item_rooms">Rooms:</string>
 </resources>

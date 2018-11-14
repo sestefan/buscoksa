@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">BuscoKsa</string>
+    <string name="facebook_app_id">2415364648490623</string>
+    <string name="fb_login_protocol_scheme">fb2415364648490623</string>
+    <string name="open_nav">Open navigation drawer</string>
+    <string name="close_nav">Close navigation drawer</string>
+    <string name="home">Inicio</string>
+    <string name="favorite">Favoritos</string>
+    <string name="search">Buscar</string>
+    <string name="system">Sistema</string>
+    <string name="settings">Configuraciones</string>
+    <string name="terms_amp_conditions"><![CDATA[Términos y Condiciones]]></string>
+    <string name="help">Ayuda</string>
+    <string name="login">Iniciar Sesión</string>
+    <string name="main_price">Precio</string>
+    <string name="main_neighborhood">Barrio</string>
+    <string name="main_rooms">Dormitorios</string>
+    <string name="detail_rooms">Dormitorios</string>
+    <string name="detail_bathrooms">Baños</string>
+    <string name="detail_garage">Garage: </string>
+    <string name="detail_mts">mts</string>
+    <string name="detail_balcony">Balcón:</string>
+    <string name="detail_playground">Patio:</string>
+    <string name="detail_title">Título</string>
+    <string name="detail_barbecue">Parrillero:</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logout">Cerrar Sesión</string>
+    <string name="welcome">Bienvenido</string>
+    <string name="item_price">Precio:</string>
+    <string name="item_neighborhood">Barrio:</string>
+    <string name="item_rooms">Dormitorios:</string>
+</resources>

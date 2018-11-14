@@ -10,8 +10,11 @@ import com.example.sestefan.proyecto.domain.Houses;
 
 public class HouseTask extends AsyncTaskLoader<Houses> {
 
-    public HouseTask(@NonNull Context context) {
+    private String token;
+
+    public HouseTask(@NonNull Context context, String token) {
         super(context);
+        this.token = token;
     }
 
     @Override
@@ -25,7 +28,7 @@ public class HouseTask extends AsyncTaskLoader<Houses> {
 
         HouseRepository houseRepository = new HouseRepository();
 
-        return houseRepository.homeSearch();
+        return houseRepository.homeSearch(token);
 
     }
 }

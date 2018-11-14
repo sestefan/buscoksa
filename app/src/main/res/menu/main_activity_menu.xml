@@ -11,7 +11,7 @@
                 android:title="@string/home" />
             <item
                 android:id="@+id/nav_favorite"
-                android:icon="@drawable/icons8_heart_24"
+                android:icon="@drawable/baseline_favorite_border_black_24dp"
                 android:title="@string/favorite" />
 
             <item
