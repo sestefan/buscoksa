@@ -46,12 +46,6 @@ public class FacebookLoginHelper {
         request.executeAsync();
     }
 
-    public interface FacebookLoginHelperCallback {
-
-        void getInfo(String id, String name, String email, String imageUrl);
-
-    }
-
     public static class FacebookLoginHelperDto {
 
         private String id;
@@ -85,4 +79,11 @@ public class FacebookLoginHelper {
             return imageUrl;
         }
     }
+
+    public interface FacebookLoginHelperCallback {
+
+        void getInfo(String id, String name, String email, String imageUrl);
+
+    }
+
 }

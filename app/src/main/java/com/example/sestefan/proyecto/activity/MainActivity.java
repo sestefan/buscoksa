@@ -14,8 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sestefan.proyecto.R;
-import com.example.sestefan.proyecto.fragment.FavoriteFragment;
 import com.example.sestefan.proyecto.fragment.FacebookLoginFragment;
+import com.example.sestefan.proyecto.fragment.FavoriteFragment;
 import com.example.sestefan.proyecto.fragment.HelpFragment;
 import com.example.sestefan.proyecto.fragment.HomePageFragment;
 import com.example.sestefan.proyecto.fragment.HouseDetailFragment;
