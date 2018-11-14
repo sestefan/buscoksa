@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sestefan.proyecto.R;
-import com.example.sestefan.proyecto.fragment.BookmarkFragment;
+import com.example.sestefan.proyecto.fragment.FavoriteFragment;
 import com.example.sestefan.proyecto.fragment.FacebookLoginFragment;
 import com.example.sestefan.proyecto.fragment.HelpFragment;
 import com.example.sestefan.proyecto.fragment.HomePageFragment;
@@ -28,7 +28,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         FacebookLoginFragment.OnFragmentInteractionListener, HomePageFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener,
-        BookmarkFragment.OnFragmentInteractionListener, TermsAndCondsFragment.OnFragmentInteractionListener, HouseDetailFragment.OnFragmentInteractionListener {
+        FavoriteFragment.OnFragmentInteractionListener, TermsAndCondsFragment.OnFragmentInteractionListener, HouseDetailFragment.OnFragmentInteractionListener {
 
     private FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto;
 
@@ -61,13 +61,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void getInfo(String id, String name, String email, String imageUrl) {
                     facebookLoginHelperDto = new FacebookLoginHelper.FacebookLoginHelperDto(id, name, email, imageUrl);
-                    showPostLoginFragment(facebookLoginHelperDto);
+                    showPostFacebookLogin(facebookLoginHelperDto);
                 }
             });
             return;
         } else {
-            if (navigationView.getMenu().findItem(R.id.nav_bookmarks).isVisible()) {
-                navigationView.getMenu().findItem(R.id.nav_bookmarks).setVisible(false);
+            if (navigationView.getMenu().findItem(R.id.nav_favorite).isVisible()) {
+                navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
             }
         }
 
@@ -90,8 +90,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_logout:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, FacebookLoginFragment.newInstance()).addToBackStack(null).commit();
                 break;
-            case R.id.nav_bookmarks:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, BookmarkFragment.newInstance(facebookLoginHelperDto.getId())).addToBackStack(null).commit();
+            case R.id.nav_favorite:
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, FavoriteFragment.newInstance(facebookLoginHelperDto.getId())).addToBackStack(null).commit();
                 break;
             case R.id.nav_help:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, HelpFragment.newInstance()).addToBackStack(null).commit();
@@ -114,21 +114,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void showLoginMenuItem() {
+    public void showPostFacebookLogOut() {
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
         navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
-        navigationView.getMenu().findItem(R.id.nav_bookmarks).setVisible(false);
+        navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
         facebookLoginHelperDto = null;
         txtFacebookFullName.setText("");
         imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);
         Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
+
     }
 
     @Override
-    public void showPostLoginFragment(FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto) {
+    public void showPostFacebookLogin(FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto) {
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
-        navigationView.getMenu().findItem(R.id.nav_bookmarks).setVisible(true);
+        navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(true);
         navigationView.getMenu().findItem(R.id.nav_login).setChecked(false);
         navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
         imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);

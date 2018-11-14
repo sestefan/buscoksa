@@ -10,9 +10,9 @@
                 android:icon="@drawable/baseline_home_24"
                 android:title="@string/home" />
             <item
-                android:id="@+id/nav_bookmarks"
+                android:id="@+id/nav_favorite"
                 android:icon="@drawable/icons8_heart_24"
-                android:title="@string/bookmarks" />
+                android:title="@string/favorite" />
 
             <item
                 android:id="@+id/nav_search"

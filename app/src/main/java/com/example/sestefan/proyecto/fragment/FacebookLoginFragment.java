@@ -57,7 +57,7 @@ public class FacebookLoginFragment extends Fragment implements LoaderManager.Loa
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
                 if (currentAccessToken == null) {
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance()).addToBackStack(null).commit();
-                    onFragmentInteractionListener.showLoginMenuItem();
+                    onFragmentInteractionListener.showPostFacebookLogOut();
                 }
             }
         };
@@ -85,20 +85,20 @@ public class FacebookLoginFragment extends Fragment implements LoaderManager.Loa
                         if (getActivity().getSupportLoaderManager().getLoader(0) != null) {
                             getActivity().getSupportLoaderManager().initLoader(0, null, FacebookLoginFragment.this);
                         }
-                        onFragmentInteractionListener.showPostLoginFragment(facebookLoginHelperDto);
+                        onFragmentInteractionListener.showPostFacebookLogin(facebookLoginHelperDto);
                     }
                 });
             }
 
             @Override
             public void onCancel() {
-                onFragmentInteractionListener.showLoginMenuItem();
+                onFragmentInteractionListener.showPostFacebookLogOut();
 
             }
 
             @Override
             public void onError(FacebookException error) {
-                onFragmentInteractionListener.showLoginMenuItem();
+                onFragmentInteractionListener.showPostFacebookLogOut();
             }
         });
         return v;
@@ -143,9 +143,9 @@ public class FacebookLoginFragment extends Fragment implements LoaderManager.Loa
 
     public interface OnFragmentInteractionListener {
 
-        void showLoginMenuItem();
+        void showPostFacebookLogOut();
 
-        void showPostLoginFragment(FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto);
+        void showPostFacebookLogin(FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto);
 
     }
 

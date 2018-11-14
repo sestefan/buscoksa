@@ -21,7 +21,7 @@ import com.example.sestefan.proyecto.recycler_view.adapter.HouseAdapter;
 import com.example.sestefan.proyecto.task.BookmarkTask;
 
 //TODO: Hacer Heredar la clase de HomeFragment y cambiar las propiedades del padre que correspondan a protected
-public class BookmarkFragment extends Fragment implements LoaderManager.LoaderCallbacks<Houses> {
+public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCallbacks<Houses> {
 
     private static final String TOKEN = "token";
 
@@ -33,12 +33,12 @@ public class BookmarkFragment extends Fragment implements LoaderManager.LoaderCa
 
     private OnFragmentInteractionListener onFragmentInteractionListener;
 
-    public BookmarkFragment() {
+    public FavoriteFragment() {
         // Required empty public constructor
     }
 
-    public static BookmarkFragment newInstance(String token) {
-        BookmarkFragment fragment = new BookmarkFragment();
+    public static FavoriteFragment newInstance(String token) {
+        FavoriteFragment fragment = new FavoriteFragment();
         Bundle bundle = new Bundle();
         bundle.putString(TOKEN, token);
         fragment.setArguments(bundle);
@@ -57,7 +57,7 @@ public class BookmarkFragment extends Fragment implements LoaderManager.LoaderCa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_bookmark, container, false);
+        View v = inflater.inflate(R.layout.fragment_favorite, container, false);
 
         recyclerView = v.findViewById(R.id.recycledView);
 
