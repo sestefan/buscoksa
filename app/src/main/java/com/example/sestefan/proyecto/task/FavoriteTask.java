@@ -8,11 +8,11 @@ import android.support.v4.content.AsyncTaskLoader;
 import com.example.sestefan.proyecto.api.HouseRepository;
 import com.example.sestefan.proyecto.domain.Houses;
 
-public class BookmarkTask extends AsyncTaskLoader<Houses> {
+public class FavoriteTask extends AsyncTaskLoader<Houses> {
 
     private String token;
 
-    public BookmarkTask(@NonNull Context context, String token) {
+    public FavoriteTask(@NonNull Context context, String token) {
         super(context);
         this.token = token;
     }

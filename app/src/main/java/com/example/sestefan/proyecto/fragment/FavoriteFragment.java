@@ -18,7 +18,7 @@ import com.example.sestefan.proyecto.domain.Houses;
 import com.example.sestefan.proyecto.domain.Response;
 import com.example.sestefan.proyecto.recycler_view.RecyclerViewClickListener;
 import com.example.sestefan.proyecto.recycler_view.adapter.HouseAdapter;
-import com.example.sestefan.proyecto.task.BookmarkTask;
+import com.example.sestefan.proyecto.task.FavoriteTask;
 
 //TODO: Hacer Heredar la clase de HomeFragment y cambiar las propiedades del padre que correspondan a protected
 public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCallbacks<Houses> {
@@ -63,7 +63,7 @@ public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCa
 
         RecyclerViewClickListener adapterI = (view, position) -> {
             Response element = houses.getResponse().get(position);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HouseDetailFragment.newInstance(element)).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HouseDetailFragment.newInstance(element, token)).addToBackStack(null).commit();
             adapter.notifyDataSetChanged();
         };
         adapter = new HouseAdapter(getContext(), houses, true, adapterI);
@@ -99,7 +99,7 @@ public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCa
     @NonNull
     @Override
     public Loader<Houses> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new BookmarkTask(getContext(), token);
+        return new FavoriteTask(getContext(), token);
     }
 
     @Override

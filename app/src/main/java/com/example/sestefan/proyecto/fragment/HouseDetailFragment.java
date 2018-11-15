@@ -2,33 +2,43 @@ package com.example.sestefan.proyecto.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.sestefan.proyecto.R;
+import com.example.sestefan.proyecto.domain.FavoriteResponse;
 import com.example.sestefan.proyecto.domain.Habitaciones;
 import com.example.sestefan.proyecto.domain.Response;
 import com.example.sestefan.proyecto.recycler_view.RecyclerViewClickListener;
 import com.example.sestefan.proyecto.recycler_view.adapter.HouseImagesAdapter;
+import com.example.sestefan.proyecto.task.SaveFavoriteTask;
 
 import java.util.ArrayList;
 
-public class HouseDetailFragment extends Fragment {
+public class HouseDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<FavoriteResponse> {
 
     public static final String EXTRA_DATA = "extra_data";
+    private static final String TOKEN = "token";
 
     private RecyclerView recyclerView;
     private HouseImagesAdapter adapter;
 
     private Response data;
+
+    private String token;
 
     private TextView txtRoom;
     private TextView txtBathroom;
@@ -40,16 +50,19 @@ public class HouseDetailFragment extends Fragment {
     private CheckBox chkBalcony;
     private CheckBox chkPlayground;
 
-    private OnFragmentInteractionListener mListener;
+    private FacebookLoginFragment.OnFragmentInteractionListener mListener;
+
+    private Menu menu;
 
     public HouseDetailFragment() {
         // Required empty public constructor
     }
 
-    public static HouseDetailFragment newInstance(Response data) {
+    public static HouseDetailFragment newInstance(Response data, String token) {
         HouseDetailFragment fragment = new HouseDetailFragment();
         Bundle args = new Bundle();
         args.putParcelable(EXTRA_DATA, data);
+        args.putString(TOKEN, token);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,6 +72,7 @@ public class HouseDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             data = getArguments().getParcelable(EXTRA_DATA);
+            token = getArguments().getString(TOKEN);
         }
     }
 
@@ -105,8 +119,8 @@ public class HouseDetailFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof FacebookLoginFragment.OnFragmentInteractionListener) {
+            mListener = (FacebookLoginFragment.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -121,11 +135,40 @@ public class HouseDetailFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        this.menu = menu;
         menu.clear();
         inflater.inflate(R.menu.favorite_menu, menu);
+        MenuItem isntFavorite = menu.findItem(R.id.isnt_favorite);
+        if (mListener.isFacebookLoggedIn()) {
+            MenuItem isFavorite = menu.findItem(R.id.is_favorite);
+            if (data.isFavorito()) {
+                isFavorite.setVisible(true);
+            } else {
+                isntFavorite.setVisible(true);
+            }
+        } else {
+            isntFavorite.setVisible(true);
+        }
     }
 
-    public interface OnFragmentInteractionListener {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.is_favorite:
+            case R.id.isnt_favorite:
+                if (mListener.isFacebookLoggedIn()) {
+                    Bundle queryBundle = new Bundle();
+                    getActivity().getSupportLoaderManager().restartLoader(0, queryBundle, this);
+
+                    if (getActivity().getSupportLoaderManager().getLoader(0) != null) {
+                        getActivity().getSupportLoaderManager().initLoader(0, null, this);
+                    }
+                } else {
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FacebookLoginFragment.newInstance()).addToBackStack(null).commit();
+                }
+                break;
+        }
+        return true;
     }
 
     private String getBathQty() {
@@ -136,5 +179,29 @@ public class HouseDetailFragment extends Fragment {
             }
         }
         return "0";
+    }
+
+    @NonNull
+    @Override
+    public Loader<FavoriteResponse> onCreateLoader(int i, @Nullable Bundle bundle) {
+        return new SaveFavoriteTask(getContext(), token, Integer.valueOf(data.getInmuebleId()));
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<FavoriteResponse> loader, FavoriteResponse data) {
+        if (data.getResultado().equals("OK")) {
+            if (menu.findItem(R.id.isnt_favorite).isVisible()) {
+                menu.findItem(R.id.is_favorite).setVisible(true);
+                menu.findItem(R.id.isnt_favorite).setVisible(false);
+            } else {
+                menu.findItem(R.id.is_favorite).setVisible(false);
+                menu.findItem(R.id.isnt_favorite).setVisible(true);
+            }
+        }
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<FavoriteResponse> loader) {
+
     }
 }

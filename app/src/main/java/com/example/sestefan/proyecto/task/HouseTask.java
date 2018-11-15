@@ -28,7 +28,7 @@ public class HouseTask extends AsyncTaskLoader<Houses> {
 
         HouseRepository houseRepository = new HouseRepository();
 
-        return houseRepository.homeSearch(token);
+        return houseRepository.homeSearch(null, token);
 
     }
 }

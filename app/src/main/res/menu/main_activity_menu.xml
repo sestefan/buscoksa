@@ -13,11 +13,6 @@
                 android:id="@+id/nav_favorite"
                 android:icon="@drawable/baseline_favorite_border_black_24dp"
                 android:title="@string/favorite" />
-
-            <item
-                android:id="@+id/nav_search"
-                android:icon="@drawable/baseline_search_24"
-                android:title="@string/search" />
         </item>
 
         <item android:title="@string/system">

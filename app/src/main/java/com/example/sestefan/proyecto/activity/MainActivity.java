@@ -20,7 +20,6 @@ import com.example.sestefan.proyecto.fragment.FacebookLoginFragment;
 import com.example.sestefan.proyecto.fragment.FavoriteFragment;
 import com.example.sestefan.proyecto.fragment.HelpFragment;
 import com.example.sestefan.proyecto.fragment.HomePageFragment;
-import com.example.sestefan.proyecto.fragment.HouseDetailFragment;
 import com.example.sestefan.proyecto.fragment.TermsAndCondsFragment;
 import com.example.sestefan.proyecto.util.facebook.FacebookLoginHelper;
 import com.facebook.AccessToken;
@@ -32,7 +31,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         FacebookLoginFragment.OnFragmentInteractionListener, HomePageFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener,
-        FavoriteFragment.OnFragmentInteractionListener, TermsAndCondsFragment.OnFragmentInteractionListener, HouseDetailFragment.OnFragmentInteractionListener {
+        FavoriteFragment.OnFragmentInteractionListener, TermsAndCondsFragment.OnFragmentInteractionListener {
 
     private FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto;
 
@@ -78,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
-                //TODO: Ver como realizar esto cada vez que me lleva al home page.
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                     fragmentManager.popBackStack();
@@ -113,22 +111,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
+
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
+
     }
 
     @Override
     public boolean isFacebookLoggedIn() {
+
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         return accessToken != null && !accessToken.isExpired();
+
     }
 
 
     @Override
     public void showPostFacebookLogin(FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto) {
+
+        this.facebookLoginHelperDto = facebookLoginHelperDto;
+
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
         navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(true);
@@ -149,10 +154,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentManager.popBackStack();
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto.getId())).commit();
+
     }
 
     @Override
     public void showPostFacebookLogOut() {
+
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
         navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
         navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
@@ -160,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         txtFacebookFullName.setText("");
         imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);
         Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
+
     }
-    
+
 }
