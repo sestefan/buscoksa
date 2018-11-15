@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -66,6 +68,8 @@ public class HouseDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_house_detail, container, false);
 
+        setHasOptionsMenu(true);
+
         txtRoom = v.findViewById(R.id.txt_room);
         txtBathroom = v.findViewById(R.id.txt_bath);
         txtDims = v.findViewById(R.id.txt_dims);
@@ -86,7 +90,6 @@ public class HouseDetailFragment extends Fragment {
         chkBalcony.setChecked(Boolean.valueOf(data.getInmuebleTieneBalcon()));
         chkPlayground.setChecked(Boolean.valueOf(data.getInmuebleTienePatio()));
 
-
         recyclerView = v.findViewById(R.id.recycledView2);
 
         RecyclerViewClickListener adapterI = (view, position) -> {
@@ -95,6 +98,7 @@ public class HouseDetailFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
+
         return v;
     }
 
@@ -113,6 +117,12 @@ public class HouseDetailFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.favorite_menu, menu);
     }
 
     public interface OnFragmentInteractionListener {

@@ -64,6 +64,8 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home_page, container, false);
 
+        setHasOptionsMenu(true);
+
         recyclerView = v.findViewById(R.id.recycledView);
 
         RecyclerViewClickListener adapterI = (view, position) -> {
