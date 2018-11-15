@@ -1,9 +1,12 @@
 package com.example.sestefan.proyecto.fragment;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -15,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.sestefan.proyecto.R;
@@ -25,6 +27,12 @@ import com.example.sestefan.proyecto.domain.Response;
 import com.example.sestefan.proyecto.recycler_view.RecyclerViewClickListener;
 import com.example.sestefan.proyecto.recycler_view.adapter.HouseImagesAdapter;
 import com.example.sestefan.proyecto.task.SaveFavoriteTask;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -45,10 +53,13 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
     private TextView txtDims;
     private TextView txtTitle;
 
-    private CheckBox chkGarage;
-    private CheckBox chkBarbecue;
-    private CheckBox chkBalcony;
-    private CheckBox chkPlayground;
+    private TextView txtGarage;
+    private TextView txtBarbecue;
+    private TextView txtkBalcony;
+    private TextView txtGarden;
+
+    MapView mapView;
+    GoogleMap map;
 
     private FacebookLoginFragment.OnFragmentInteractionListener mListener;
 
@@ -89,20 +100,20 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
         txtDims = v.findViewById(R.id.txt_dims);
         txtTitle = v.findViewById(R.id.txt_title);
 
-        chkGarage = v.findViewById(R.id.chk_garage);
-        chkBarbecue = v.findViewById(R.id.chk_barbecue);
-        chkBalcony = v.findViewById(R.id.chk_balcony);
-        chkPlayground = v.findViewById(R.id.chk_playground);
+        txtGarage = v.findViewById(R.id.txt_garage);
+        txtBarbecue = v.findViewById(R.id.txt_barbecue);
+        txtkBalcony = v.findViewById(R.id.txt_balcony);
+        txtGarden = v.findViewById(R.id.txt_garden);
 
-        txtRoom.setText(data.getInmuebleCantDormitorio());
-        txtBathroom.setText(getBathQty());
-        txtDims.setText(data.getInmuebleMetrosCuadrados());
-        txtTitle.setText(data.getInmuebleTitulo());
+        txtRoom.setText(String.format("%s %s", getContext().getString(R.string.detail_rooms), data.getInmuebleCantDormitorio()));
+        txtBathroom.setText(String.format("%s %s", getContext().getString(R.string.detail_bathrooms), getBathQty()));
+        txtDims.setText(String.format("%s %s", getContext().getString(R.string.detail_mts), data.getInmuebleMetrosCuadrados()));
+        txtTitle.setText(String.format("%s %s", getContext().getString(R.string.detail_title), data.getInmuebleTitulo()));
 
-        chkGarage.setChecked(Boolean.valueOf(data.getInmuebleTieneGarage()));
-        chkBarbecue.setChecked(Boolean.valueOf(data.getInmuebleTieneParrillero()));
-        chkBalcony.setChecked(Boolean.valueOf(data.getInmuebleTieneBalcon()));
-        chkPlayground.setChecked(Boolean.valueOf(data.getInmuebleTienePatio()));
+        txtGarage.setText(String.format("%s %s", getContext().getString(R.string.detail_garage), data.getInmuebleTieneGarage()));
+        txtBarbecue.setText(String.format("%s %s", getContext().getString(R.string.detail_barbecue), data.getInmuebleTieneParrillero()));
+        txtkBalcony.setText(String.format("%s %s", getContext().getString(R.string.detail_balcony), data.getInmuebleTieneBalcon()));
+        txtGarden.setText(String.format("%s %s", getContext().getString(R.string.detail_garden), data.getInmuebleTienePatio()));
 
         recyclerView = v.findViewById(R.id.recycledView2);
 
@@ -113,7 +124,35 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
 
+        // Gets the MapView from the XML layout and creates it
+        mapView = v.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+
+        // Gets to GoogleMap from the MapView and does initialization stuff
+        mapView.getMapAsync(googleMap -> {
+            map = googleMap;
+            map.getUiSettings().setMyLocationButtonEnabled(false);
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            }
+            map.setMyLocationEnabled(true);
+
+            // Needs to call MapsInitializer before doing any CameraUpdateFactory calls
+            MapsInitializer.initialize(getContext());
+
+            // Updates the location and zoom of the MapView
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(43.1, -87.9), 10);
+            map.animateCamera(cameraUpdate);
+        });
+
+
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        mapView.onResume();
+        super.onResume();
     }
 
     @Override
@@ -131,6 +170,18 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 
     @Override

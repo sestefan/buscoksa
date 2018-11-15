@@ -57,6 +57,7 @@ public class HouseImagesAdapter extends RecyclerView.Adapter<HouseImagesAdapter.
     public class HouseImagesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final ImageView imgHouse;
+
         private RecyclerViewClickListener listener;
 
         public HouseImagesViewHolder(View itemView, RecyclerViewClickListener listener) {

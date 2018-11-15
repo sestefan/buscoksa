@@ -12,15 +12,15 @@
     <string name="terms_amp_conditions"><![CDATA[Términos y Condiciones]]></string>
     <string name="help">Ayuda</string>
     <string name="login">Iniciar Sesión</string>
-    <string name="main_price">Precio</string>
-    <string name="main_neighborhood">Barrio</string>
-    <string name="main_rooms">Dormitorios</string>
-    <string name="detail_rooms">Dormitorios</string>
-    <string name="detail_bathrooms">Baños</string>
-    <string name="detail_garage">Garage: </string>
-    <string name="detail_mts">mts</string>
+    <string name="main_price">Precio:</string>
+    <string name="main_neighborhood">Barrio:</string>
+    <string name="main_rooms">Dormitorios:</string>
+    <string name="detail_rooms">Dormitorios:</string>
+    <string name="detail_bathrooms">Baños:</string>
+    <string name="detail_garage">Garage:</string>
+    <string name="detail_mts">m²:</string>
     <string name="detail_balcony">Balcón:</string>
-    <string name="detail_playground">Patio:</string>
+    <string name="detail_garden">Patio:</string>
     <string name="detail_title">Título</string>
     <string name="detail_barbecue">Parrillero:</string>
 

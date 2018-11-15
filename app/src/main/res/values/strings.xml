@@ -14,13 +14,13 @@
     <string name="login">Login</string>
     <string name="main_price">price</string>
     <string name="main_neighborhood">neighborhood</string>
-    <string name="main_rooms">rooms</string>
-    <string name="detail_rooms">#rooms</string>
-    <string name="detail_bathrooms">#bathrooms</string>
-    <string name="detail_garage">Garage</string>
-    <string name="detail_mts">mts</string>
+    <string name="main_rooms">Rooms:</string>
+    <string name="detail_rooms">Rooms:</string>
+    <string name="detail_bathrooms">Bathrooms:</string>
+    <string name="detail_garage">Garage:</string>
+    <string name="detail_mts">m²:</string>
     <string name="detail_balcony">Balcony:</string>
-    <string name="detail_playground">playground:</string>
+    <string name="detail_garden">Garden:</string>
     <string name="detail_title">Title:</string>
     <string name="detail_barbecue">Barbecue:</string>
 

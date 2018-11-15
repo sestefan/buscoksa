@@ -25,8 +25,6 @@ import com.example.sestefan.proyecto.util.facebook.FacebookLoginHelper;
 import com.facebook.AccessToken;
 import com.squareup.picasso.Picasso;
 
-import java.util.Objects;
-
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
@@ -64,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 facebookLoginHelperDto = new FacebookLoginHelper.FacebookLoginHelperDto(id, name, email, imageUrl);
                 showPostFacebookLogin(facebookLoginHelperDto);
             });
-            return;
         } else {
             if (navigationView.getMenu().findItem(R.id.nav_favorite).isVisible()) {
                 navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
@@ -149,12 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
         }
         txtFacebookFullName.setText(String.format("%s %s", getString(R.string.welcome), facebookLoginHelperDto.getName()));
-        FragmentManager fragmentManager = Objects.requireNonNull(getSupportFragmentManager());
-        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
-            fragmentManager.popBackStack();
-        }
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto.getId())).commit();
-
+        getSupportFragmentManager().popBackStack();
     }
 
     @Override
