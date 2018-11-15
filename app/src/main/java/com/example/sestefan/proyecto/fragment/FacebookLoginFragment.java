@@ -146,9 +146,11 @@ public class FacebookLoginFragment extends Fragment implements LoaderManager.Loa
 
     public interface OnFragmentInteractionListener {
 
-        void showPostFacebookLogOut();
+        boolean isFacebookLoggedIn();
 
         void showPostFacebookLogin(FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto);
+
+        void showPostFacebookLogOut();
 
     }
 

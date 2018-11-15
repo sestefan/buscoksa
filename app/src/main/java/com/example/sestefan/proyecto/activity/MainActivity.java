@@ -121,15 +121,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void showPostFacebookLogOut() {
-        navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
-        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
-        navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
-        facebookLoginHelperDto = null;
-        txtFacebookFullName.setText("");
-        imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);
-        Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
+    public boolean isFacebookLoggedIn() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        return accessToken != null && !accessToken.isExpired();
     }
+
 
     @Override
     public void showPostFacebookLogin(FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto) {
@@ -155,9 +151,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto.getId())).commit();
     }
 
-    private boolean isFacebookLoggedIn() {
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        return accessToken != null && !accessToken.isExpired();
+    @Override
+    public void showPostFacebookLogOut() {
+        navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
+        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
+        navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
+        facebookLoginHelperDto = null;
+        txtFacebookFullName.setText("");
+        imgFacebookLogin = navigationView.getHeaderView(0).findViewById(R.id.img_fb_profile);
+        Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
     }
-
+    
 }
