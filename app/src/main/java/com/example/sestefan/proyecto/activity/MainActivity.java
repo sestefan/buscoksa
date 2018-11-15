@@ -1,6 +1,8 @@
 package com.example.sestefan.proyecto.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +25,8 @@ import com.example.sestefan.proyecto.fragment.TermsAndCondsFragment;
 import com.example.sestefan.proyecto.util.facebook.FacebookLoginHelper;
 import com.facebook.AccessToken;
 import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -87,6 +91,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_logout:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, FacebookLoginFragment.newInstance()).addToBackStack(null).commit();
                 break;
+            case R.id.nav_settings:
+                Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+                break;
             case R.id.nav_favorite:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, FavoriteFragment.newInstance(facebookLoginHelperDto.getId())).addToBackStack(null).commit();
                 break;
@@ -138,6 +148,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Picasso.get().load(R.drawable.menu_header_img).transform(new CropCircleTransformation()).into(imgFacebookLogin);
         }
         txtFacebookFullName.setText(String.format("%s %s", getString(R.string.welcome), facebookLoginHelperDto.getName()));
+        FragmentManager fragmentManager = Objects.requireNonNull(getSupportFragmentManager());
+        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+            fragmentManager.popBackStack();
+        }
         getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto.getId())).commit();
     }
 

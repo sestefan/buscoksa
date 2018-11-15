@@ -62,7 +62,7 @@ public class FacebookLoginFragment extends Fragment implements LoaderManager.Loa
                     for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                         fragmentManager.popBackStack();
                     }
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(false, null)).addToBackStack(null).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(false, null)).commit();
                     onFragmentInteractionListener.showPostFacebookLogOut();
                 }
             }
