@@ -61,13 +61,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             FacebookLoginHelper.getFacebookInfo(AccessToken.getCurrentAccessToken(), (id, name, email, imageUrl) -> {
                 facebookLoginHelperDto = new FacebookLoginHelper.FacebookLoginHelperDto(id, name, email, imageUrl);
                 showPostFacebookLogin(facebookLoginHelperDto);
+                getSupportFragmentManager().beginTransaction().add(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto != null ? facebookLoginHelperDto.getId() : null)).commit();
             });
         } else {
             if (navigationView.getMenu().findItem(R.id.nav_favorite).isVisible()) {
                 navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
             }
+            getSupportFragmentManager().beginTransaction().add(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto != null ? facebookLoginHelperDto.getId() : null)).commit();
         }
-        getSupportFragmentManager().beginTransaction().add(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto != null ? facebookLoginHelperDto.getId() : null)).commit();
     }
 
     @Override
