@@ -52,6 +52,7 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
     private TextView txtBathroom;
     private TextView txtDims;
     private TextView txtTitle;
+    private TextView txtPrice;
 
     private TextView txtGarage;
     private TextView txtBarbecue;
@@ -99,6 +100,7 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
         txtBathroom = v.findViewById(R.id.txt_bath);
         txtDims = v.findViewById(R.id.txt_dims);
         txtTitle = v.findViewById(R.id.txt_title);
+        txtPrice = v.findViewById(R.id.txt_detail_price);
 
         txtGarage = v.findViewById(R.id.txt_garage);
         txtBarbecue = v.findViewById(R.id.txt_barbecue);
@@ -109,6 +111,7 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
         txtBathroom.setText(String.format("%s %s", getContext().getString(R.string.detail_bathrooms), getBathQty()));
         txtDims.setText(String.format("%s %s", getContext().getString(R.string.detail_mts), data.getInmuebleMetrosCuadrados()));
         txtTitle.setText(String.format("%s %s", getContext().getString(R.string.detail_title), data.getInmuebleTitulo()));
+        txtPrice.setText(String.format("%s %s", getContext().getString(R.string.detail_price), data.getInmueblePrecio()));
 
         txtGarage.setText(String.format("%s %s", getContext().getString(R.string.detail_garage), data.getInmuebleTieneGarage()));
         txtBarbecue.setText(String.format("%s %s", getContext().getString(R.string.detail_barbecue), data.getInmuebleTieneParrillero()));
@@ -141,7 +144,7 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
             MapsInitializer.initialize(getContext());
 
             // Updates the location and zoom of the MapView
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(43.1, -87.9), 10);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(new LatLng(-34.866944, -56.166667));
             map.animateCamera(cameraUpdate);
         });
 
@@ -151,7 +154,7 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onResume() {
-        mapView.onResume();
+//        mapView.onResume();
         super.onResume();
     }
 
@@ -175,13 +178,13 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
+//        mapView.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapView.onLowMemory();
+//        mapView.onLowMemory();
     }
 
     @Override

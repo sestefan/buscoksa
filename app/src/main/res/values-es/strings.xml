@@ -33,4 +33,5 @@
     <string name="item_rooms">Dormitorios:</string>
     <string name="search_title">Buscar</string>
     <string name="search_filter">Filtros</string>
+    <string name="detail_price">Precio:</string>
 </resources>
