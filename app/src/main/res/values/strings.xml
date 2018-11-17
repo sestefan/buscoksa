@@ -34,4 +34,6 @@
     <string name="search_title">Search</string>
     <string name="search_filter">Filter</string>
     <string name="detail_price">Price:</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

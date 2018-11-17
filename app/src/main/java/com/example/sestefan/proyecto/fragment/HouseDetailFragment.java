@@ -56,7 +56,7 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
 
     private TextView txtGarage;
     private TextView txtBarbecue;
-    private TextView txtkBalcony;
+    private TextView txtBalcony;
     private TextView txtGarden;
 
     MapView mapView;
@@ -104,7 +104,7 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
 
         txtGarage = v.findViewById(R.id.txt_garage);
         txtBarbecue = v.findViewById(R.id.txt_barbecue);
-        txtkBalcony = v.findViewById(R.id.txt_balcony);
+        txtBalcony = v.findViewById(R.id.txt_balcony);
         txtGarden = v.findViewById(R.id.txt_garden);
 
         txtRoom.setText(String.format("%s %s", getContext().getString(R.string.detail_rooms), data.getInmuebleCantDormitorio()));
@@ -113,10 +113,14 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
         txtTitle.setText(String.format("%s %s", getContext().getString(R.string.detail_title), data.getInmuebleTitulo()));
         txtPrice.setText(String.format("%s %s", getContext().getString(R.string.detail_price), data.getInmueblePrecio()));
 
-        txtGarage.setText(String.format("%s %s", getContext().getString(R.string.detail_garage), data.getInmuebleTieneGarage()));
-        txtBarbecue.setText(String.format("%s %s", getContext().getString(R.string.detail_barbecue), data.getInmuebleTieneParrillero()));
-        txtkBalcony.setText(String.format("%s %s", getContext().getString(R.string.detail_balcony), data.getInmuebleTieneBalcon()));
-        txtGarden.setText(String.format("%s %s", getContext().getString(R.string.detail_garden), data.getInmuebleTienePatio()));
+        boolean hasGarage = Boolean.valueOf(data.getInmuebleTieneGarage());
+        boolean hasBarbecue = Boolean.valueOf(data.getInmuebleTieneParrillero());
+        boolean hasBalcony = Boolean.valueOf(data.getInmuebleTieneBalcon());
+        boolean hasGarden = Boolean.valueOf(data.getInmuebleTienePatio());
+        txtGarage.setText(String.format("%s %s", getContext().getString(R.string.detail_garage), hasGarage ? getContext().getString(R.string.yes) : getContext().getString(R.string.no)));
+        txtBarbecue.setText(String.format("%s %s", getContext().getString(R.string.detail_barbecue), hasBarbecue ? getContext().getString(R.string.yes) : getContext().getString(R.string.no)));
+        txtBalcony.setText(String.format("%s %s", getContext().getString(R.string.detail_balcony), hasBalcony ? getContext().getString(R.string.yes) : getContext().getString(R.string.no)));
+        txtGarden.setText(String.format("%s %s", getContext().getString(R.string.detail_garden), hasGarden ? getContext().getString(R.string.yes) : getContext().getString(R.string.no)));
 
         recyclerView = v.findViewById(R.id.recycledView2);
 

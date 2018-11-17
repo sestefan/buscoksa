@@ -34,4 +34,6 @@
     <string name="search_title">Buscar</string>
     <string name="search_filter">Filtros</string>
     <string name="detail_price">Precio:</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
 </resources>
