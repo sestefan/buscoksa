@@ -63,7 +63,7 @@ public class FacebookLoginFragment extends Fragment implements LoaderManager.Loa
                         fragmentManager.popBackStack();
                     }
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(false, null)).commit();
-                    onFragmentInteractionListener.showPostFacebookLogOut();
+                    onFragmentInteractionListener.postFacebookLogOut();
                 }
             }
         };
@@ -89,19 +89,19 @@ public class FacebookLoginFragment extends Fragment implements LoaderManager.Loa
                     if (getActivity().getSupportLoaderManager().getLoader(0) != null) {
                         getActivity().getSupportLoaderManager().initLoader(0, null, FacebookLoginFragment.this);
                     }
-                    onFragmentInteractionListener.showPostFacebookLogin(facebookLoginHelperDto);
+                    onFragmentInteractionListener.postFacebookLogin(facebookLoginHelperDto);
                 });
             }
 
             @Override
             public void onCancel() {
-                onFragmentInteractionListener.showPostFacebookLogOut();
+                onFragmentInteractionListener.postFacebookLogOut();
 
             }
 
             @Override
             public void onError(FacebookException error) {
-                onFragmentInteractionListener.showPostFacebookLogOut();
+                onFragmentInteractionListener.postFacebookLogOut();
             }
         });
         return v;
@@ -148,9 +148,9 @@ public class FacebookLoginFragment extends Fragment implements LoaderManager.Loa
 
         boolean isFacebookLoggedIn();
 
-        void showPostFacebookLogin(FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto);
+        void postFacebookLogin(FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto);
 
-        void showPostFacebookLogOut();
+        void postFacebookLogOut();
 
     }
 

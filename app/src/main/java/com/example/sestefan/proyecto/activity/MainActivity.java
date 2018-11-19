@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FacebookLoginFragment.OnFragmentInteractionListener, HomePageFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener,
         FavoriteFragment.OnFragmentInteractionListener, TermsAndCondsFragment.OnFragmentInteractionListener {
 
-    private FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto;
+    private FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto = null;
 
     ImageView imgFacebookLogin;
 
@@ -60,14 +60,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (isFacebookLoggedIn()) {
             FacebookLoginHelper.getFacebookInfo(AccessToken.getCurrentAccessToken(), (id, name, email, imageUrl) -> {
                 facebookLoginHelperDto = new FacebookLoginHelper.FacebookLoginHelperDto(id, name, email, imageUrl);
-                showPostFacebookLogin(facebookLoginHelperDto);
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto != null ? facebookLoginHelperDto.getId() : null)).commit();
+                postFacebookLogin(facebookLoginHelperDto);
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto.getId())).commit();
             });
         } else {
             if (navigationView.getMenu().findItem(R.id.nav_favorite).isVisible()) {
                 navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
             }
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto != null ? facebookLoginHelperDto.getId() : null)).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto.getId())).commit();
         }
     }
 
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     @Override
-    public void showPostFacebookLogin(FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto) {
+    public void postFacebookLogin(FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto) {
 
         this.facebookLoginHelperDto = facebookLoginHelperDto;
 
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void showPostFacebookLogOut() {
+    public void postFacebookLogOut() {
 
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
         navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);

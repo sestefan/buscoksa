@@ -37,20 +37,20 @@ public class HouseImagesAdapter extends RecyclerView.Adapter<HouseImagesAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull HouseImagesViewHolder holder, int position) {
-        String current = houseImages.get(position).getInmuebleImagenUrl();
-        if (current != null && current.length() > 0) {
-            Picasso.get().load(current).into(holder.getImgHouse());
-        } else {
-            Picasso.get().load(R.drawable.default_home).into(holder.getImgHouse());
+        if (houseImages.size() > 0) {
+            String current = houseImages.get(position).getInmuebleImagenUrl();
+            if (current != null && current.length() > 0) {
+                Picasso.get().load(current).into(holder.getImgHouse());
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        if (houseImages != null) {
-            return houseImages.size();
+        if (houseImages.size() == 0) {
+            return 1;
         } else {
-            return 0;
+            return houseImages.size();
         }
     }
 
@@ -64,7 +64,7 @@ public class HouseImagesAdapter extends RecyclerView.Adapter<HouseImagesAdapter.
             super(itemView);
             itemView.setOnClickListener(this);
 
-            this.imgHouse = itemView.findViewById(R.id.img_house);
+            this.imgHouse = itemView.findViewById(R.id.img_house_detail);
             this.listener = listener;
         }
 

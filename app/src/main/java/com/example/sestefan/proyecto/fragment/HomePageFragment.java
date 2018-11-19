@@ -83,6 +83,7 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
         if (getActivity().getSupportLoaderManager().getLoader(0) != null) {
             getActivity().getSupportLoaderManager().initLoader(0, null, this);
         }
+
         return v;
     }
 

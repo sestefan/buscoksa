@@ -61,7 +61,7 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHol
         }
         if (holder.isUserLoggedIn()) {
             if (current.isFavorito()) {
-                Picasso.get().load(R.drawable.baseline_favorite_white_24dp).into(holder.getImgFavorite());
+                Picasso.get().load(R.drawable.baseline_favorite_white_24dp).into(imgFavorite);
             }
         } else {
             imgFavorite.setEnabled(false);
