@@ -10,13 +10,17 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.sestefan.proyecto.R;
+import com.example.sestefan.proyecto.domain.HouseDTO;
 import com.example.sestefan.proyecto.domain.Houses;
 import com.example.sestefan.proyecto.domain.Response;
 import com.example.sestefan.proyecto.recycler_view.RecyclerViewClickListener;
@@ -36,6 +40,8 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
     private boolean isUserLoggedIn;
 
     private String token;
+
+    private HouseDTO houseDTO = null;
 
     public HomePageFragment() {
         // Required empty public constructor
@@ -95,7 +101,7 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
     @NonNull
     @Override
     public Loader<Houses> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new HouseTask(getContext(), token);
+        return new HouseTask(getContext(), houseDTO, token);
     }
 
     @Override
@@ -103,6 +109,7 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
         adapter.setResponses(data);
         houses = data;
         adapter.notifyDataSetChanged();
+        houseDTO = null;
     }
 
     @Override
@@ -125,6 +132,36 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.search_menu, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                houseDTO = new HouseDTO();
+                houseDTO.setBarrio(s.toLowerCase());
+                houseDTO.setMaxResults("100");
+
+                getActivity().getSupportLoaderManager().restartLoader(0, null, HomePageFragment.this);
+
+                if (getActivity().getSupportLoaderManager().getLoader(0) != null) {
+                    getActivity().getSupportLoaderManager().initLoader(0, null, HomePageFragment.this);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.filter:
+                Toast.makeText(getContext(), "Filtrooo", Toast.LENGTH_LONG).show();
+                break;
+        }
+        return true;
     }
 
     public static interface OnFragmentInteractionListener {

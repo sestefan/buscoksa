@@ -1,6 +1,9 @@
 package com.example.sestefan.proyecto.domain;
 
+import org.json.JSONObject;
+
 public class HouseDTO {
+
     private String TieneGarage;
 
     private String CantDormitorio;
@@ -81,8 +84,21 @@ public class HouseDTO {
         this.Barrio = Barrio;
     }
 
-    @Override
-    public String toString() {
-        return "ClassPojo [TieneGarage = " + TieneGarage + ", CantDormitorio = " + CantDormitorio + ", TienePatio = " + TienePatio + ", Precio = " + Precio + ", MaxResults = " + MaxResults + ", TieneBalcon = " + TieneBalcon + ", TieneParrillero = " + TieneParrillero + ", Barrio = " + Barrio + "]";
+    public JSONObject toJson() {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("MaxResults", getMaxResults() == null ? "" : getMaxResults());
+            body.put("Barrio", getBarrio() == null ? "" : getBarrio());
+            body.put("Precio", getPrecio() == null ? "" : getPrecio());
+            body.put("CantDormitorio", getCantDormitorio() == null ? "" : getCantDormitorio());
+            body.put("TieneParrillero", getTieneParrillero() == null ? "" : getTieneParrillero());
+            body.put("TieneGarage", getTieneGarage() == null ? "" : getTieneGarage());
+            body.put("TieneBalcon", getTieneBalcon() == null ? "" : getTieneBalcon());
+            body.put("TienePatio", getTienePatio() == null ? "" : getTienePatio());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return body;
     }
 }

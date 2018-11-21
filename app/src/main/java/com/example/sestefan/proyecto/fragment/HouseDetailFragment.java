@@ -158,7 +158,6 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
             }
         });
 
-
         return v;
     }
 

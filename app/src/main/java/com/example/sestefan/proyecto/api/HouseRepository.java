@@ -55,23 +55,9 @@ public class HouseRepository {
 
     public Houses homeSearch(HouseDTO houseDTO, String token) {
 
-        //TODO: usar el houseDTO para todo
-        JSONObject body = new JSONObject();
-        try {
-            body.put("MaxResults", 10);
-            body.put("Barrio", "");
-            body.put("Precio", "");
-            body.put("CantDormitorio", "");
-            body.put("TieneParrillero", "");
-            body.put("TieneGarage", "");
-            body.put("TieneBalcon", "");
-            body.put("TienePatio", "");
-            JSONObject result = doPost(BASE_URL + BUSCAR_INMUEBLE, body, token);
-            return new Gson().fromJson(result.toString(), Houses.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        JSONObject result = doPost(BASE_URL + BUSCAR_INMUEBLE, houseDTO.toJson(), token);
+        return new Gson().fromJson(result.toString(), Houses.class);
+
     }
 
     public Houses bookmarkSearch(String token) {
