@@ -27,9 +27,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
 
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyB4ZzhIpj5shsLnhv6Zw9Zup9AXIqsNmHQ"/>
+            android:value="AIzaSyDCU0K72VB70xMX2XYYbR5ZPHR4xkJF2Yc"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

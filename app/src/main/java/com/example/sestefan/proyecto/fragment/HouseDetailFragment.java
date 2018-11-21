@@ -1,14 +1,19 @@
 package com.example.sestefan.proyecto.fragment;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +29,12 @@ import com.example.sestefan.proyecto.domain.Response;
 import com.example.sestefan.proyecto.recycler_view.RecyclerViewClickListener;
 import com.example.sestefan.proyecto.recycler_view.adapter.HouseImagesAdapter;
 import com.example.sestefan.proyecto.task.SaveFavoriteTask;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -50,8 +61,8 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
     private TextView txtBalcony;
     private TextView txtGarden;
 
-//    MapView mapView;
-//    GoogleMap map;
+    MapView mapView;
+    GoogleMap map;
 
     private FacebookLoginFragment.OnFragmentInteractionListener mListener;
 
@@ -122,26 +133,30 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(mLayoutManager);
 
-//        // Gets the MapView from the XML layout and creates it
-//        mapView = v.findViewById(R.id.mapView);
-//        mapView.onCreate(savedInstanceState);
-//
-//        // Gets to GoogleMap from the MapView and does initialization stuff
-//        mapView.getMapAsync(googleMap -> {
-////            map = googleMap;
-////            map.getUiSettings().setMyLocationButtonEnabled(false);
-////            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-////
-////            }
-////            map.setMyLocationEnabled(true);
-////
-////            // Needs to call MapsInitializer before doing any CameraUpdateFactory calls
-////            MapsInitializer.initialize(getContext());
-////
-////            // Updates the location and zoom of the MapView
-////            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(new LatLng(-34.866944, -56.166667));
-////            map.animateCamera(cameraUpdate);
-//        });
+        SnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
+
+        // Gets the MapView from the XML layout and creates it
+        mapView = v.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+
+        // Gets to GoogleMap from the MapView and does initialization stuff
+        mapView.getMapAsync(googleMap -> {
+            map = googleMap;
+            map.getUiSettings().setMyLocationButtonEnabled(false);
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            map.setMyLocationEnabled(true);
+
+                // Needs to call MapsInitializer before doing any CameraUpdateFactory calls
+                MapsInitializer.initialize(getContext());
+
+                // Updates the location and zoom of the MapView
+                LatLng location = new LatLng(-34.866944, -56.166667);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, 14);
+                map.animateCamera(cameraUpdate);
+
+            }
+        });
 
 
         return v;
@@ -149,7 +164,7 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onResume() {
-//        mapView.onResume();
+        mapView.onResume();
         super.onResume();
     }
 
@@ -173,13 +188,13 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        mapView.onDestroy();
+        mapView.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-//        mapView.onLowMemory();
+        mapView.onLowMemory();
     }
 
     @Override

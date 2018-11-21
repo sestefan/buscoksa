@@ -95,13 +95,11 @@ public class FacebookLoginFragment extends Fragment implements LoaderManager.Loa
 
             @Override
             public void onCancel() {
-                onFragmentInteractionListener.postFacebookLogOut();
 
             }
 
             @Override
             public void onError(FacebookException error) {
-                onFragmentInteractionListener.postFacebookLogOut();
             }
         });
         return v;

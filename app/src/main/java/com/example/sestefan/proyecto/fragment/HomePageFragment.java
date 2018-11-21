@@ -1,6 +1,7 @@
 package com.example.sestefan.proyecto.fragment;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -70,7 +71,11 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
 
         RecyclerViewClickListener adapterI = (view, position) -> {
             Response element = houses.getResponse().get(position);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HouseDetailFragment.newInstance(element, token)).addToBackStack(null).commit();
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HouseDetailFragment.newInstance(element, token)).addToBackStack(null).commit();
+            } else {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.land_detail, HouseDetailFragment.newInstance(element, token)).addToBackStack(null).commit();
+            }
             adapter.notifyDataSetChanged();
         };
         adapter = new HouseAdapter(getContext(), houses, isUserLoggedIn, adapterI);
