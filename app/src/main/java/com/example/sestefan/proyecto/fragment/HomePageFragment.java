@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnActionExpandListener;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.sestefan.proyecto.R;
 import com.example.sestefan.proyecto.domain.HouseDTO;
@@ -29,7 +28,7 @@ import com.example.sestefan.proyecto.recycler_view.RecyclerViewClickListener;
 import com.example.sestefan.proyecto.recycler_view.adapter.HouseAdapter;
 import com.example.sestefan.proyecto.task.HouseTask;
 
-public class HomePageFragment extends Fragment implements LoaderManager.LoaderCallbacks<Houses>, MyDialogFragment.MyDialogListener {
+public class HomePageFragment extends Fragment implements LoaderManager.LoaderCallbacks<Houses> {
 
     private static final String ARG_USER_LOGGED_IN = "arg_user_logged_in";
     private static final String ARG_TOKEN = "token";
@@ -164,19 +163,10 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
         MenuItem filterMenu = menu.findItem(R.id.filter);
         filterMenu.setOnMenuItemClickListener(menuItem -> {
             DialogFragment dialog = new MyDialogFragment();
+            dialog.setTargetFragment(this, 1);
             dialog.show(getActivity().getSupportFragmentManager(), getString(R.string.dialogfragment));
             return true;
         });
 
-    }
-
-    @Override
-    public void onDialogPositiveClick(MyDialogFragment myDialogFragment) {
-        Toast.makeText(getContext(), "apreotó ok", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onDialogNegativeClick(MyDialogFragment myDialogFragment) {
-        Toast.makeText(getContext(), "apreotó cancel", Toast.LENGTH_LONG).show();
     }
 }
