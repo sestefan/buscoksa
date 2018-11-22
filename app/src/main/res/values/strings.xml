@@ -38,4 +38,5 @@
     <string name="no">No</string>
     <string name="detail_neighborhood">Neighborhood:</string>
     <string name="dialogfragment">MyDialogFragment</string>
+    <string name="filter_apply">Apply</string>
 </resources>

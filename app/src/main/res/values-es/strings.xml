@@ -37,4 +37,5 @@
     <string name="yes">Sí</string>
     <string name="no">No</string>
     <string name="detail_neighborhood">Barrio:</string>
+    <string name="filter_apply">Aplicar</string>
 </resources>

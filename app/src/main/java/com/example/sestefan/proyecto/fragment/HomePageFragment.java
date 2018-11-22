@@ -162,7 +162,7 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
 
         MenuItem filterMenu = menu.findItem(R.id.filter);
         filterMenu.setOnMenuItemClickListener(menuItem -> {
-            DialogFragment dialog = new MyDialogFragment();
+            DialogFragment dialog = new FilterDialogFragment();
             dialog.setTargetFragment(this, 1);
             dialog.show(getActivity().getSupportFragmentManager(), getString(R.string.dialogfragment));
             return true;
