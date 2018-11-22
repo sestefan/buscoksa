@@ -11,10 +11,12 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MenuItem.OnActionExpandListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -133,7 +135,7 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
         menu.clear();
         inflater.inflate(R.menu.search_menu, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 houseDTO = new HouseDTO();
@@ -153,6 +155,24 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
                 return false;
             }
         });
+
+        menu.findItem(R.id.search).setOnActionExpandListener(new OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                getActivity().getSupportLoaderManager().restartLoader(0, null, HomePageFragment.this);
+
+                if (getActivity().getSupportLoaderManager().getLoader(0) != null) {
+                    getActivity().getSupportLoaderManager().initLoader(0, null, HomePageFragment.this);
+                }
+                return true;
+            }
+        });
+
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -163,6 +183,7 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
         }
         return true;
     }
+
 
     public static interface OnFragmentInteractionListener {
 
