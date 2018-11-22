@@ -35,6 +35,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
@@ -43,23 +44,9 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
     public static final String EXTRA_DATA = "extra_data";
     private static final String TOKEN = "token";
 
-    private RecyclerView recyclerView;
-    private HouseImagesAdapter adapter;
-
     private Response data;
 
     private String token;
-
-    private TextView txtRoom;
-    private TextView txtBathroom;
-    private TextView txtDims;
-    private TextView txtTitle;
-    private TextView txtPrice;
-
-    private TextView txtGarage;
-    private TextView txtBarbecue;
-    private TextView txtBalcony;
-    private TextView txtGarden;
 
     MapView mapView;
     GoogleMap map;
@@ -98,21 +85,24 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
 
         setHasOptionsMenu(true);
 
-        txtRoom = v.findViewById(R.id.txt_room);
-        txtBathroom = v.findViewById(R.id.txt_bath);
-        txtDims = v.findViewById(R.id.txt_dims);
-        txtTitle = v.findViewById(R.id.txt_title);
-        txtPrice = v.findViewById(R.id.txt_detail_price);
+        TextView txtRoom = v.findViewById(R.id.txt_room);
+        TextView txtBathroom = v.findViewById(R.id.txt_bath);
+        TextView txtDims = v.findViewById(R.id.txt_dims);
+        TextView txtTitle = v.findViewById(R.id.txt_title);
+        TextView txtNeighborhood = v.findViewById(R.id.txt_detail_neighborhood);
 
-        txtGarage = v.findViewById(R.id.txt_garage);
-        txtBarbecue = v.findViewById(R.id.txt_barbecue);
-        txtBalcony = v.findViewById(R.id.txt_balcony);
-        txtGarden = v.findViewById(R.id.txt_garden);
+        TextView txtPrice = v.findViewById(R.id.txt_detail_price);
+
+        TextView txtGarage = v.findViewById(R.id.txt_garage);
+        TextView txtBarbecue = v.findViewById(R.id.txt_barbecue);
+        TextView txtBalcony = v.findViewById(R.id.txt_balcony);
+        TextView txtGarden = v.findViewById(R.id.txt_garden);
 
         txtRoom.setText(String.format("%s %s", getContext().getString(R.string.detail_rooms), data.getInmuebleCantDormitorio()));
         txtBathroom.setText(String.format("%s %s", getContext().getString(R.string.detail_bathrooms), getBathQty()));
         txtDims.setText(String.format("%s %s", getContext().getString(R.string.detail_mts), data.getInmuebleMetrosCuadrados()));
         txtTitle.setText(String.format("%s %s", getContext().getString(R.string.detail_title), data.getInmuebleTitulo()));
+        txtNeighborhood.setText(String.format("%s %s", getContext().getString(R.string.detail_neighborhood), data.getInmuebleBarrio()));
         txtPrice.setText(String.format("%s %s", getContext().getString(R.string.detail_price), data.getInmueblePrecio()));
 
         boolean hasGarage = Boolean.valueOf(data.getInmuebleTieneGarage());
@@ -124,11 +114,11 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
         txtBalcony.setText(String.format("%s %s", getContext().getString(R.string.detail_balcony), hasBalcony ? getContext().getString(R.string.yes) : getContext().getString(R.string.no)));
         txtGarden.setText(String.format("%s %s", getContext().getString(R.string.detail_garden), hasGarden ? getContext().getString(R.string.yes) : getContext().getString(R.string.no)));
 
-        recyclerView = v.findViewById(R.id.recycledView2);
+        RecyclerView recyclerView = v.findViewById(R.id.recycledView2);
 
         RecyclerViewClickListener adapterI = (view, position) -> {
         };
-        adapter = new HouseImagesAdapter(getContext(), data.getFotos(), adapterI);
+        HouseImagesAdapter adapter = new HouseImagesAdapter(getContext(), data.getFotos(), adapterI);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -154,6 +144,7 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
                 LatLng location = new LatLng(-34.866944, -56.166667);
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, 14);
                 map.animateCamera(cameraUpdate);
+                map.addMarker(new MarkerOptions().position(location).title("La casa anda por el barrio. Suerte!"));
 
             }
         });

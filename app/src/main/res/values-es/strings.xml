@@ -36,4 +36,5 @@
     <string name="detail_price">Precio:</string>
     <string name="yes">Sí</string>
     <string name="no">No</string>
+    <string name="detail_neighborhood">Barrio:</string>
 </resources>
