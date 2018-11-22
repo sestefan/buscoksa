@@ -1,6 +1,5 @@
 package com.example.sestefan.proyecto.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,8 +29,6 @@ public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCa
     private HouseAdapter adapter;
 
     private String token;
-
-    private OnFragmentInteractionListener onFragmentInteractionListener;
 
     public FavoriteFragment() {
         // Required empty public constructor
@@ -80,20 +77,8 @@ public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            onFragmentInteractionListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
-        onFragmentInteractionListener = null;
     }
 
     @NonNull
@@ -114,6 +99,4 @@ public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCa
 
     }
 
-    public interface OnFragmentInteractionListener {
-    }
 }

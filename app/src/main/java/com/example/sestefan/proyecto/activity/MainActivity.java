@@ -28,8 +28,7 @@ import com.squareup.picasso.Picasso;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        FacebookLoginFragment.OnFragmentInteractionListener, HomePageFragment.OnFragmentInteractionListener, HelpFragment.OnFragmentInteractionListener,
-        FavoriteFragment.OnFragmentInteractionListener, TermsAndCondsFragment.OnFragmentInteractionListener {
+        FacebookLoginFragment.OnFragmentInteractionListener {
 
     private FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto = null;
 
@@ -127,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return accessToken != null && !accessToken.isExpired();
 
     }
-
 
     @Override
     public void postFacebookLogin(FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto) {

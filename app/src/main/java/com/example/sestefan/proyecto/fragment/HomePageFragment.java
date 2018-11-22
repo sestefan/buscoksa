@@ -1,10 +1,10 @@
 package com.example.sestefan.proyecto.fragment;
 
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -29,7 +29,7 @@ import com.example.sestefan.proyecto.recycler_view.RecyclerViewClickListener;
 import com.example.sestefan.proyecto.recycler_view.adapter.HouseAdapter;
 import com.example.sestefan.proyecto.task.HouseTask;
 
-public class HomePageFragment extends Fragment implements LoaderManager.LoaderCallbacks<Houses> {
+public class HomePageFragment extends Fragment implements LoaderManager.LoaderCallbacks<Houses>, MyDialogFragment.MyDialogListener {
 
     private static final String ARG_USER_LOGGED_IN = "arg_user_logged_in";
     private static final String ARG_TOKEN = "token";
@@ -37,7 +37,6 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
     private RecyclerView recyclerView;
     private Houses houses;
     private HouseAdapter adapter;
-    private OnFragmentInteractionListener onFragmentInteractionListener;
 
     private boolean isUserLoggedIn;
 
@@ -120,17 +119,6 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof HomePageFragment.OnFragmentInteractionListener) {
-            onFragmentInteractionListener = (HomePageFragment.OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.search_menu, menu);
@@ -173,19 +161,22 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
             }
         });
 
+        MenuItem filterMenu = menu.findItem(R.id.filter);
+        filterMenu.setOnMenuItemClickListener(menuItem -> {
+            DialogFragment dialog = new MyDialogFragment();
+            dialog.show(getActivity().getSupportFragmentManager(), getString(R.string.dialogfragment));
+            return true;
+        });
+
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.filter:
-                Toast.makeText(getContext(), "Filtrooo", Toast.LENGTH_LONG).show();
-                break;
-        }
-        return true;
+    @Override
+    public void onDialogPositiveClick(MyDialogFragment myDialogFragment) {
+        Toast.makeText(getContext(), "apreotó ok", Toast.LENGTH_LONG).show();
     }
 
-
-    public static interface OnFragmentInteractionListener {
-
+    @Override
+    public void onDialogNegativeClick(MyDialogFragment myDialogFragment) {
+        Toast.makeText(getContext(), "apreotó cancel", Toast.LENGTH_LONG).show();
     }
 }

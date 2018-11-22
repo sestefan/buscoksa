@@ -1,6 +1,5 @@
 package com.example.sestefan.proyecto.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,8 +15,6 @@ public class TermsAndCondsFragment extends Fragment {
     private static final String URL_TERMS_CONDS = "http://173.233.86.183:8080/CursoAndroidWebApp/condiciones.html";
 
     private WebView webView;
-
-    private OnFragmentInteractionListener mListener;
 
     public TermsAndCondsFragment() {
         // Required empty public constructor
@@ -48,22 +45,8 @@ public class TermsAndCondsFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-    }
 }

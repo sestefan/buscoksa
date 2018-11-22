@@ -1,6 +1,5 @@
 package com.example.sestefan.proyecto.fragment;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,7 +16,6 @@ public class HelpFragment extends Fragment {
 
     VideoView videoView;
     ToggleButton toggleButton;
-    private OnFragmentInteractionListener onFragmentInteractionListener;
 
     public HelpFragment() {
         // Required empty public constructor
@@ -43,24 +41,7 @@ public class HelpFragment extends Fragment {
 
         String path = "android.resource://" + getContext().getPackageName() + "/" + R.raw.bunny2;
         videoView.setVideoURI(Uri.parse(path));
-//
-//        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//            @Override
-//            public void onPrepared(MediaPlayer mediaPlayer) {
-//                mediaPlayer.setLooping(true);
-//            }
-//        });
-//
-//        toggleButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (((ToggleButton) view).isChecked()) {
-//                    videoView.start();
-//                } else {
-//                    videoView.pause();
-//                }
-//            }
-//        });
+
         MediaController mediaController = new MediaController(getContext());
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
@@ -69,21 +50,8 @@ public class HelpFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            onFragmentInteractionListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
     }
 
-    public interface OnFragmentInteractionListener {
-    }
 }
