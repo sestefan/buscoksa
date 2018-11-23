@@ -35,16 +35,31 @@ public class FilterDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         View v = getActivity().getLayoutInflater().inflate(R.layout.filter_dialog_fragment, null);
+
         Button btnApply = v.findViewById(R.id.btn_apply);
-        btnApply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getTargetFragment().onActivityResult(1, 200, null);
-                dismiss();
-            }
-        });
+        btnApply.setOnClickListener(view -> apply());
+
+        Button btnCancel = v.findViewById(R.id.btn_cancel);
+        btnCancel.setOnClickListener(view -> cancel());
         builder.setView(v);
         return builder.create();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    }
+
+    private void apply() {
+        getTargetFragment().onActivityResult(1, 200, null);
+        dismiss();
+    }
+
+    private void cancel() {
+        getTargetFragment().onActivityResult(1, 200, null);
+        dismiss();
     }
 
 
