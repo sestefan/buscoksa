@@ -20,11 +20,10 @@ public class FacebookLoginHelper {
 
     public static void getFacebookInfo(AccessToken accessToken, FacebookLoginHelperCallback callback) {
 
-        id = accessToken.toString();
-
         GraphRequest request = GraphRequest.newMeRequest(accessToken, (object, response) -> {
 
             try {
+                id = object.getString("id");
                 name = !object.getString("name").isEmpty() ? object.getString("name") : "You Know Who";
                 email = object.getString("email");
                 imageUrl = FACEBOOK_GRAPH_URL.replace("{__USER_ID__}", object.getString("id"));

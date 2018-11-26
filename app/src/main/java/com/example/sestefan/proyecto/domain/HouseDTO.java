@@ -1,8 +1,11 @@
 package com.example.sestefan.proyecto.domain;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONObject;
 
-public class HouseDTO {
+public class HouseDTO implements Parcelable {
 
     private String TieneGarage;
 
@@ -19,6 +22,20 @@ public class HouseDTO {
     private String TieneParrillero;
 
     private String Barrio;
+
+    public HouseDTO() {
+    }
+
+    protected HouseDTO(Parcel in) {
+        TieneGarage = in.readString();
+        CantDormitorio = in.readString();
+        TienePatio = in.readString();
+        Precio = in.readString();
+        MaxResults = in.readString();
+        TieneBalcon = in.readString();
+        TieneParrillero = in.readString();
+        Barrio = in.readString();
+    }
 
     public String getTieneGarage() {
         return TieneGarage;
@@ -83,6 +100,36 @@ public class HouseDTO {
     public void setBarrio(String Barrio) {
         this.Barrio = Barrio;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(TieneGarage);
+        dest.writeString(CantDormitorio);
+        dest.writeString(TienePatio);
+        dest.writeString(Precio);
+        dest.writeString(MaxResults);
+        dest.writeString(TieneBalcon);
+        dest.writeString(TieneParrillero);
+        dest.writeString(Barrio);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<HouseDTO> CREATOR = new Parcelable.Creator<HouseDTO>() {
+        @Override
+        public HouseDTO createFromParcel(Parcel in) {
+            return new HouseDTO(in);
+        }
+
+        @Override
+        public HouseDTO[] newArray(int size) {
+            return new HouseDTO[size];
+        }
+    };
 
     public JSONObject toJson() {
         JSONObject body = new JSONObject();

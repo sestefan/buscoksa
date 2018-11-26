@@ -1,6 +1,7 @@
 package com.example.sestefan.proyecto.fragment;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,12 +13,34 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.sestefan.proyecto.R;
+import com.example.sestefan.proyecto.domain.HouseDTO;
+import com.example.sestefan.proyecto.domain.Houses;
+import com.github.florent37.androidslidr.Slidr;
 
 public class FilterDialogFragment extends DialogFragment {
+
+    private Slidr slidr;
+
+    private HouseDTO filter;
+
+    private Houses houses;
+
+    public static FilterDialogFragment newInstance(Houses houses, HouseDTO filter) {
+        FilterDialogFragment fragment = new FilterDialogFragment();
+        Bundle args = new Bundle();
+        args.putParcelable("houses", houses);
+        args.putParcelable("filter", filter);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            this.houses = getArguments().getParcelable("houses");
+            this.filter = getArguments().getParcelable("filter");
+        }
     }
 
     @Nullable
@@ -41,6 +64,16 @@ public class FilterDialogFragment extends DialogFragment {
 
         Button btnCancel = v.findViewById(R.id.btn_cancel);
         btnCancel.setOnClickListener(view -> cancel());
+
+        slidr = v.findViewById(R.id.seekBar);
+        slidr.setMax(500000);
+        slidr.setMin(10000);
+        slidr.setTextFormatter(value -> String.format("%s %s", "U$S", (int) value));
+
+        if (filter != null) {
+            slidr.setCurrentValue(Float.valueOf(filter.getPrecio()));
+        }
+
         builder.setView(v);
         return builder.create();
     }
@@ -53,7 +86,14 @@ public class FilterDialogFragment extends DialogFragment {
     }
 
     private void apply() {
-        getTargetFragment().onActivityResult(1, 200, null);
+        Intent data = new Intent();
+        if (filter == null) {
+            filter = new HouseDTO();
+            filter.setMaxResults("100");
+        }
+        filter.setPrecio(String.valueOf(slidr.getCurrentValue()));
+        data.putExtra("dataFilter", filter);
+        getTargetFragment().onActivityResult(1, 200, data);
         dismiss();
     }
 

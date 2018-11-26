@@ -1,5 +1,6 @@
 package com.example.sestefan.proyecto.fragment;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -42,6 +43,8 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
     private String token;
 
     private HouseDTO houseDTO = null;
+
+    private HouseDTO filter = null;
 
     public HomePageFragment() {
         // Required empty public constructor
@@ -128,6 +131,7 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
                 houseDTO = new HouseDTO();
                 houseDTO.setBarrio(s.toLowerCase());
                 houseDTO.setMaxResults("100");
+                filter = null;
 
                 getActivity().getSupportLoaderManager().restartLoader(0, null, HomePageFragment.this);
 
@@ -162,11 +166,34 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
 
         MenuItem filterMenu = menu.findItem(R.id.filter);
         filterMenu.setOnMenuItemClickListener(menuItem -> {
-            DialogFragment dialog = new FilterDialogFragment();
+            DialogFragment dialog = FilterDialogFragment.newInstance(houses, filter);
             dialog.setTargetFragment(this, 1);
             dialog.show(getActivity().getSupportFragmentManager(), getString(R.string.dialogfragment));
             return true;
         });
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (data == null) {
+            return;
+        }
+        Bundle extras = data.getExtras();
+
+        if (extras == null) {
+            return;
+        }
+
+        HouseDTO houseDTO = extras.getParcelable("dataFilter");
+        this.houseDTO = houseDTO;
+        this.filter = houseDTO;
+
+        getActivity().getSupportLoaderManager().restartLoader(0, null, HomePageFragment.this);
+
+        if (getActivity().getSupportLoaderManager().getLoader(0) != null) {
+            getActivity().getSupportLoaderManager().initLoader(0, null, HomePageFragment.this);
+        }
     }
 }
