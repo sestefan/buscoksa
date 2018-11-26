@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,12 @@ import android.widget.Button;
 import com.example.sestefan.proyecto.R;
 import com.example.sestefan.proyecto.domain.HouseDTO;
 import com.example.sestefan.proyecto.domain.Houses;
+import com.example.sestefan.proyecto.domain.Response;
+import com.example.sestefan.proyecto.recycler_view.RecyclerViewClickListener;
+import com.example.sestefan.proyecto.recycler_view.adapter.NeighborhoodAdapter;
 import com.github.florent37.androidslidr.Slidr;
+
+import java.util.ArrayList;
 
 public class FilterDialogFragment extends DialogFragment {
 
@@ -24,6 +31,8 @@ public class FilterDialogFragment extends DialogFragment {
     private HouseDTO filter;
 
     private Houses houses;
+
+    private NeighborhoodAdapter adapter;
 
     public static FilterDialogFragment newInstance(Houses houses, HouseDTO filter) {
         FilterDialogFragment fragment = new FilterDialogFragment();
@@ -73,6 +82,22 @@ public class FilterDialogFragment extends DialogFragment {
         if (filter != null) {
             slidr.setCurrentValue(Float.valueOf(filter.getPrecio()));
         }
+
+        RecyclerView recyclerView = v.findViewById(R.id.recycledView3);
+
+        RecyclerViewClickListener adapterI = (view, position) -> {
+
+
+            adapter.notifyDataSetChanged();
+        };
+        ArrayList<String> neighborhoods;
+        neighborhoods = new ArrayList<>();
+        for (Response response : houses.getResponse()) {
+            neighborhoods.add(response.getInmuebleBarrio());
+        }
+        adapter = new NeighborhoodAdapter(getContext(), neighborhoods, adapterI);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         builder.setView(v);
         return builder.create();

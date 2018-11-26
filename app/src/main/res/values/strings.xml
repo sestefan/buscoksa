@@ -39,5 +39,6 @@
     <string name="detail_neighborhood">Neighborhood:</string>
     <string name="dialogfragment">MyDialogFragment</string>
     <string name="filter_apply">Apply</string>
-    <string name="filter_cancel">Cancel</string>
+    <string name="filter_cancel">X</string>
+    <string name="filter_garage">Garage</string>
 </resources>
