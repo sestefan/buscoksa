@@ -185,7 +185,8 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
                     menuItem.setIcon(R.drawable.baseline_list_24);
                     if (linearLayoutNormal) {
                         menuItem.setIcon(R.drawable.baseline_dashboard_24);
-                        adapter.setLayoutNormal(false);
+                        linearLayoutNormal = false;
+                        adapter.setLayoutNormal(linearLayoutNormal);
                         recyclerView.setAdapter(adapter);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                         recyclerView.requestLayout();
