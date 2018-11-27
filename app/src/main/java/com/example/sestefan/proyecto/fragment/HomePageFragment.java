@@ -40,6 +40,7 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
     private HouseAdapter adapter;
 
     private boolean isUserLoggedIn;
+    private boolean linearLayoutNormal;
 
     private String token;
 
@@ -88,7 +89,8 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
             }
             adapter.notifyDataSetChanged();
         };
-        adapter = new HouseAdapter(getContext(), houses, isUserLoggedIn, adapterI);
+        linearLayoutNormal = true;
+        adapter = new HouseAdapter(getContext(), houses, isUserLoggedIn, linearLayoutNormal, adapterI);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -177,9 +179,18 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
             MenuItem layoutMenu = menu.findItem(R.id.layoutView);
             layoutMenu.setVisible(true);
             layoutMenu.setOnMenuItemClickListener(menuItem -> {
+                //TODO: Está todo roto
                 if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
                     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                    menuItem.setIcon(R.drawable.baseline_dashboard_24);
+                    menuItem.setIcon(R.drawable.baseline_list_24);
+                    if (linearLayoutNormal) {
+                        menuItem.setIcon(R.drawable.baseline_dashboard_24);
+                        adapter.setLayoutNormal(false);
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                        recyclerView.requestLayout();
+                    } else {
+                    }
                 } else if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
                     recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
                     menuItem.setIcon(R.drawable.baseline_horizontal_split_24);

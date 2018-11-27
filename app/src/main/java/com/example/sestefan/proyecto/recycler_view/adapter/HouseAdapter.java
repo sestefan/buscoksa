@@ -25,23 +25,33 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.HouseViewHol
     private RecyclerViewClickListener listener;
 
     private boolean isUserLoggedIn;
+    private boolean isLayoutNormal;
 
-    public HouseAdapter(Context context, Houses houses, boolean isUserLoggedIn, RecyclerViewClickListener listener) {
+    public HouseAdapter(Context context, Houses houses, boolean isUserLoggedIn, boolean isLayoutNormal, RecyclerViewClickListener listener) {
         inflater = LayoutInflater.from(context);
         this.houses = houses;
         this.listener = listener;
         this.isUserLoggedIn = isUserLoggedIn;
+        this.isLayoutNormal = isLayoutNormal;
     }
 
     public void setResponses(Houses houses) {
         this.houses = houses;
     }
 
+    public void setLayoutNormal(boolean layoutNormal) {
+        isLayoutNormal = layoutNormal;
+    }
+
     @NonNull
     @Override
     public HouseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView;
-        itemView = inflater.inflate(R.layout.house_card_item, parent, false);
+        if (isLayoutNormal) {
+            itemView = inflater.inflate(R.layout.house_card_item, parent, false);
+        } else {
+            itemView = inflater.inflate(R.layout.house_card_item_2, parent, false);
+        }
         return new HouseViewHolder(itemView, listener, isUserLoggedIn);
     }
 
