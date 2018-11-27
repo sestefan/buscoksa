@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (navigationView.getMenu().findItem(R.id.nav_favorite).isVisible()) {
                 navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
             }
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto.getId())).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), null)).commit();
         }
     }
 

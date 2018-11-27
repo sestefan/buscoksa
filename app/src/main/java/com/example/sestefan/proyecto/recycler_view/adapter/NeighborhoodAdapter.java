@@ -15,19 +15,19 @@ import java.util.ArrayList;
 
 public class NeighborhoodAdapter extends RecyclerView.Adapter<NeighborhoodAdapter.NeigborhoodViewHolder> {
 
-    private ArrayList<String> neighborhood;
+    private ArrayList<String> neighborhoods;
     private LayoutInflater inflater;
     private RecyclerViewClickListener listener;
 
     public NeighborhoodAdapter(Context context, ArrayList<String> neighborhood, RecyclerViewClickListener listener) {
         inflater = LayoutInflater.from(context);
-        this.neighborhood = neighborhood;
+        this.neighborhoods = neighborhood;
         this.listener = listener;
     }
 
     @NonNull
     @Override
-    public NeighborhoodAdapter.NeigborhoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NeigborhoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView;
         itemView = inflater.inflate(R.layout.filter_neighborhood, parent, false);
         return new NeigborhoodViewHolder(itemView, listener);
@@ -36,12 +36,12 @@ public class NeighborhoodAdapter extends RecyclerView.Adapter<NeighborhoodAdapte
     @Override
     public void onBindViewHolder(@NonNull NeigborhoodViewHolder holder, int position) {
         TextView txtNeighborhood = holder.getTxtNeighborhood();
-        txtNeighborhood.setText(neighborhood.get(position));
+        txtNeighborhood.setText(neighborhoods.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return neighborhood.size();
+        return neighborhoods.size();
     }
 
     public class NeigborhoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -67,5 +67,6 @@ public class NeighborhoodAdapter extends RecyclerView.Adapter<NeighborhoodAdapte
         public TextView getTxtNeighborhood() {
             return txtNeighborhood;
         }
+
     }
 }

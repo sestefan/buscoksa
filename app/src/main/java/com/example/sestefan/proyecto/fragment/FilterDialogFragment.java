@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import com.example.sestefan.proyecto.R;
 import com.example.sestefan.proyecto.domain.HouseDTO;
@@ -28,7 +30,12 @@ public class FilterDialogFragment extends DialogFragment {
 
     private Slidr slidr;
 
+    private Switch swGarage;
+    private Switch swBarbecue;
+
     private HouseDTO filter;
+
+    private String neighborhood;
 
     private Houses houses;
 
@@ -79,16 +86,14 @@ public class FilterDialogFragment extends DialogFragment {
         slidr.setMin(10000);
         slidr.setTextFormatter(value -> String.format("%s %s", "U$S", (int) value));
 
-        if (filter != null) {
-            slidr.setCurrentValue(Float.valueOf(filter.getPrecio()));
-        }
+        swGarage = v.findViewById(R.id.sw_filter_garage);
+        swBarbecue = v.findViewById(R.id.sw_filter_barbecue);
 
         RecyclerView recyclerView = v.findViewById(R.id.recycledView3);
 
-        RecyclerViewClickListener adapterI = (view, position) -> {
-
-
-            adapter.notifyDataSetChanged();
+        RecyclerViewClickListener adapterI = (v1, position) -> {
+            TextView textView = v1.findViewById(R.id.txt_filter_neighborhood);
+            neighborhood = textView.getText().toString();
         };
         ArrayList<String> neighborhoods;
         neighborhoods = new ArrayList<>();
@@ -98,6 +103,13 @@ public class FilterDialogFragment extends DialogFragment {
         adapter = new NeighborhoodAdapter(getContext(), neighborhoods, adapterI);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        if (filter != null) {
+            slidr.setCurrentValue(Float.valueOf(filter.getPrecio()));
+            swGarage.setChecked(Boolean.valueOf(filter.getTieneGarage()));
+            swBarbecue.setChecked(Boolean.valueOf(filter.getTieneParrillero()));
+            neighborhood = filter.getBarrio();
+        }
 
         builder.setView(v);
         return builder.create();
@@ -116,7 +128,12 @@ public class FilterDialogFragment extends DialogFragment {
             filter = new HouseDTO();
             filter.setMaxResults("100");
         }
+
         filter.setPrecio(String.valueOf(slidr.getCurrentValue()));
+        filter.setBarrio(neighborhood);
+        filter.setTieneGarage(String.valueOf(swGarage.isChecked()));
+        filter.setTieneParrillero(String.valueOf(swBarbecue.isChecked()));
+
         data.putExtra("dataFilter", filter);
         getTargetFragment().onActivityResult(1, 200, data);
         dismiss();

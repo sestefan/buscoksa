@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -172,6 +173,18 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
             return true;
         });
 
+        MenuItem layoutMenu = menu.findItem(R.id.layoutView);
+        layoutMenu.setOnMenuItemClickListener(menuItem -> {
+            if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                menuItem.setIcon(R.drawable.baseline_dashboard_24);
+            } else if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                menuItem.setIcon(R.drawable.baseline_horizontal_split_24);
+            }
+            return true;
+        });
+
     }
 
     @Override
@@ -196,4 +209,5 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
             getActivity().getSupportLoaderManager().initLoader(0, null, HomePageFragment.this);
         }
     }
+
 }

@@ -40,4 +40,6 @@
     <string name="filter_apply">Aplicar</string>
     <string name="filter_cancel">X</string>
     <string name="filter_garage">Garage</string>
+    <string name="filter_barbecue">Parrillero</string>
+    <string name="menu_view">Vista</string>
 </resources>
