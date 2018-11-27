@@ -173,17 +173,23 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
             return true;
         });
 
-        MenuItem layoutMenu = menu.findItem(R.id.layoutView);
-        layoutMenu.setOnMenuItemClickListener(menuItem -> {
-            if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                menuItem.setIcon(R.drawable.baseline_dashboard_24);
-            } else if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
-                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                menuItem.setIcon(R.drawable.baseline_horizontal_split_24);
-            }
-            return true;
-        });
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            MenuItem layoutMenu = menu.findItem(R.id.layoutView);
+            layoutMenu.setVisible(true);
+            layoutMenu.setOnMenuItemClickListener(menuItem -> {
+                if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    menuItem.setIcon(R.drawable.baseline_dashboard_24);
+                } else if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                    menuItem.setIcon(R.drawable.baseline_horizontal_split_24);
+                }
+                return true;
+            });
+        } else {
+            MenuItem layoutMenu = menu.findItem(R.id.layoutView);
+            layoutMenu.setVisible(false);
+        }
 
     }
 
