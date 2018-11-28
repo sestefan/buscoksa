@@ -115,6 +115,9 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
         adapter.setResponses(data);
         houses = data;
         adapter.notifyDataSetChanged();
+        if (houses.getResponse().size() == 0) {
+            filter = null;
+        }
         houseDTO = null;
     }
 

@@ -97,10 +97,19 @@ public class FilterDialogFragment extends DialogFragment {
 
         RecyclerViewClickListener adapterI = (v1, position) -> {
             TextView textView = v1.findViewById(R.id.txt_filter_neighborhood);
+//            if (textView.getBackground() instanceof ColorDrawable) {
+//                ColorDrawable cd = (ColorDrawable) textView.getBackground();
+//                if (cd.getColor() == Color.RED) {
+//                    textView.setBackgroundResource(R.color.white);
+//                } else {
+//                    textView.setBackgroundResource(R.color.red);
+//                }
+//            }
             neighborhood = textView.getText().toString();
         };
         ArrayList<String> neighborhoods;
         neighborhoods = new ArrayList<>();
+        //TODO: Ver cuando no se encuentran barrios
         for (Response response : houses.getResponse()) {
             neighborhoods.add(response.getInmuebleBarrio());
         }
@@ -112,6 +121,14 @@ public class FilterDialogFragment extends DialogFragment {
 
         RecyclerViewClickListener adapterI2 = (v1, position) -> {
             TextView textView = v1.findViewById(R.id.txt_filter_room);
+//            if (textView.getBackground() instanceof ColorDrawable) {
+//                ColorDrawable cd = (ColorDrawable) textView.getBackground();
+//                if (cd.getColor() == Color.RED) {
+//                    textView.setBackgroundResource(R.color.white);
+//                } else {
+//                    textView.setBackgroundResource(R.color.red);
+//                }
+//            }
             room = textView.getText().toString();
         };
         ArrayList<String> rooms;
