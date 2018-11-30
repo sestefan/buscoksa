@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.sestefan.proyecto.R;
 import com.example.sestefan.proyecto.domain.HouseDTO;
 import com.example.sestefan.proyecto.domain.Houses;
+import com.example.sestefan.proyecto.domain.Neighborhood;
 import com.example.sestefan.proyecto.domain.Response;
 import com.example.sestefan.proyecto.recycler_view.RecyclerViewClickListener;
 import com.example.sestefan.proyecto.recycler_view.adapter.NeighborhoodAdapter;
@@ -35,6 +36,8 @@ public class FilterDialogFragment extends DialogFragment {
     private Switch swBarbecue;
 
     private HouseDTO filter;
+
+    private ArrayList<Neighborhood> neighborhoods;
 
     private String neighborhood;
     private String room;
@@ -107,13 +110,7 @@ public class FilterDialogFragment extends DialogFragment {
 //            }
             neighborhood = textView.getText().toString();
         };
-        ArrayList<String> neighborhoods;
-        neighborhoods = new ArrayList<>();
-        //TODO: Ver cuando no se encuentran barrios
-        for (Response response : houses.getResponse()) {
-            neighborhoods.add(response.getInmuebleBarrio());
-        }
-        adapter = new NeighborhoodAdapter(getContext(), neighborhoods, adapterI);
+        adapter = new NeighborhoodAdapter(getContext(), getNeighborhoods(), adapterI);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
@@ -131,12 +128,7 @@ public class FilterDialogFragment extends DialogFragment {
 //            }
             room = textView.getText().toString();
         };
-        ArrayList<String> rooms;
-        rooms = new ArrayList<>();
-        for (int i = 1; i <= 4; i++) {
-            rooms.add(String.valueOf(i));
-        }
-        adapter2 = new RoomsAdapter(getContext(), rooms, adapterI2);
+        adapter2 = new RoomsAdapter(getContext(), getRooms(), adapterI2);
         recyclerView2.setAdapter(adapter2);
         recyclerView2.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
@@ -182,5 +174,34 @@ public class FilterDialogFragment extends DialogFragment {
         dismiss();
     }
 
+    private ArrayList<Neighborhood> loadNeighborhood() {
+        ArrayList<Neighborhood> neighborhoods = new ArrayList<>();
+        return neighborhoods;
+    }
 
+    @NonNull
+    private ArrayList<String> getNeighborhoods() {
+        ArrayList<String> neighborhoods = new ArrayList<>();
+        if (houses.getResponse().size() == 0) {
+            this.neighborhoods = loadNeighborhood();
+            for (Neighborhood neighborhood : this.neighborhoods) {
+                neighborhoods.add(neighborhood.getName());
+            }
+        } else {
+            for (Response response : houses.getResponse()) {
+                neighborhoods.add(response.getInmuebleBarrio());
+            }
+        }
+        return neighborhoods;
+    }
+
+    @NonNull
+    private ArrayList<String> getRooms() {
+        ArrayList<String> rooms;
+        rooms = new ArrayList<>();
+        for (int i = 1; i <= 4; i++) {
+            rooms.add(String.valueOf(i));
+        }
+        return rooms;
+    }
 }
