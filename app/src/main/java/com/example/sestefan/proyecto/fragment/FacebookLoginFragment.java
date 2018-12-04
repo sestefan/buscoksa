@@ -31,6 +31,7 @@ import java.util.Objects;
 public class FacebookLoginFragment extends Fragment implements LoaderManager.LoaderCallbacks<User> {
 
     private static final String EMAIL = "email";
+    private static final String NEIGHBORHOODS = "neighborhoods";
 
     private FacebookLoginHelper.FacebookLoginHelperDto facebookLoginHelperDto;
 
@@ -40,19 +41,27 @@ public class FacebookLoginFragment extends Fragment implements LoaderManager.Loa
     private LoginButton loginButton;
     private AccessTokenTracker accessTokenTracker;
 
+    private Bundle neighborhoods;
+
 
     public FacebookLoginFragment() {
         // Required empty public constructor
     }
 
-    public static FacebookLoginFragment newInstance() {
+    public static FacebookLoginFragment newInstance(Bundle neighborhoods) {
         FacebookLoginFragment fragment = new FacebookLoginFragment();
+        Bundle args = new Bundle();
+        args.putBundle(NEIGHBORHOODS, neighborhoods);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            neighborhoods = getArguments().getBundle(NEIGHBORHOODS);
+        }
         callbackManager = CallbackManager.Factory.create();
         accessTokenTracker = new AccessTokenTracker() {
             @Override
@@ -62,7 +71,7 @@ public class FacebookLoginFragment extends Fragment implements LoaderManager.Loa
                     for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                         fragmentManager.popBackStack();
                     }
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(false, null)).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(false, neighborhoods, null)).commit();
                     onFragmentInteractionListener.postFacebookLogOut();
                 }
             }

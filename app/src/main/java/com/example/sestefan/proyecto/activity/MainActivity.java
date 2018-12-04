@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sestefan.proyecto.R;
+import com.example.sestefan.proyecto.domain.Neighborhood;
 import com.example.sestefan.proyecto.fragment.FacebookLoginFragment;
 import com.example.sestefan.proyecto.fragment.FavoriteFragment;
 import com.example.sestefan.proyecto.fragment.HelpFragment;
@@ -40,10 +41,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
 
+    private Bundle neighborhoodMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        neighborhoodMap = new Bundle();
+        neighborhoodMap.putParcelable("Buceo", new Neighborhood("Buceo", -34.900000, -56.133056));
+        neighborhoodMap.putParcelable("Cordón", new Neighborhood("Cordón", -34.9010327, -56.1780686));
+        neighborhoodMap.putParcelable("Parque Batlle", new Neighborhood("Parque Batlle", -34.8948847, -56.1574818));
+        neighborhoodMap.putParcelable("Malvin", new Neighborhood("Malvin", -34.8907661, -56.114232));
+        neighborhoodMap.putParcelable("La figurita", new Neighborhood("La figurita", -34.8764424, -56.1813848));
+        neighborhoodMap.putParcelable("El pinar", new Neighborhood("El pinar", -34.8003944, -34.8003944));
 
         setContentView(R.layout.activity_main);
 
@@ -62,13 +73,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             FacebookLoginHelper.getFacebookInfo(AccessToken.getCurrentAccessToken(), (id, name, email, imageUrl) -> {
                 facebookLoginHelperDto = new FacebookLoginHelper.FacebookLoginHelperDto(id, name, email, imageUrl);
                 postFacebookLogin(facebookLoginHelperDto);
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto.getId())).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), neighborhoodMap, facebookLoginHelperDto.getId())).commit();
             });
         } else {
             if (navigationView.getMenu().findItem(R.id.nav_favorite).isVisible()) {
                 navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
             }
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), null)).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), neighborhoodMap, null)).commit();
         }
     }
 
@@ -80,13 +91,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                     fragmentManager.popBackStack();
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), facebookLoginHelperDto != null ? facebookLoginHelperDto.getId() : null)).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, HomePageFragment.newInstance(isFacebookLoggedIn(), neighborhoodMap, facebookLoginHelperDto != null ? facebookLoginHelperDto.getId() : null)).commit();
                 break;
             case R.id.nav_login:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, FacebookLoginFragment.newInstance()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, FacebookLoginFragment.newInstance(neighborhoodMap)).addToBackStack(null).commit();
                 break;
             case R.id.nav_logout:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, FacebookLoginFragment.newInstance()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, FacebookLoginFragment.newInstance(neighborhoodMap)).addToBackStack(null).commit();
                 break;
             case R.id.nav_settings:
                 Intent intent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
@@ -95,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 break;
             case R.id.nav_favorite:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, FavoriteFragment.newInstance(facebookLoginHelperDto.getId())).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, FavoriteFragment.newInstance(facebookLoginHelperDto.getId(), neighborhoodMap)).addToBackStack(null).commit();
                 break;
             case R.id.nav_help:
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, HelpFragment.newInstance()).addToBackStack(null).commit();

@@ -23,6 +23,7 @@ import com.example.sestefan.proyecto.task.FavoriteTask;
 public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCallbacks<Houses> {
 
     private static final String TOKEN = "token";
+    private static final String NEIGHBORHOODS = "neighborhoods";
 
     private RecyclerView recyclerView;
     private Houses houses;
@@ -30,14 +31,17 @@ public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCa
 
     private String token;
 
+    private Bundle neighborhoods;
+
     public FavoriteFragment() {
         // Required empty public constructor
     }
 
-    public static FavoriteFragment newInstance(String token) {
+    public static FavoriteFragment newInstance(String token, Bundle neighborhoods) {
         FavoriteFragment fragment = new FavoriteFragment();
         Bundle bundle = new Bundle();
         bundle.putString(TOKEN, token);
+        bundle.putBundle(NEIGHBORHOODS, neighborhoods);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -46,7 +50,8 @@ public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            token = getArguments().getString("token");
+            token = getArguments().getString(TOKEN);
+            neighborhoods = getArguments().getBundle(NEIGHBORHOODS);
         }
     }
 
@@ -60,7 +65,7 @@ public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCa
 
         RecyclerViewClickListener adapterI = (view, position) -> {
             Response element = houses.getResponse().get(position);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HouseDetailFragment.newInstance(element, token)).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HouseDetailFragment.newInstance(element, neighborhoods.getParcelable(element.getInmuebleBarrio()), token)).addToBackStack(null).commit();
             adapter.notifyDataSetChanged();
         };
         adapter = new HouseAdapter(getContext(), houses, true, true, adapterI);

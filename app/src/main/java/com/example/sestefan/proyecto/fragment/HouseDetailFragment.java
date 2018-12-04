@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.example.sestefan.proyecto.R;
 import com.example.sestefan.proyecto.domain.FavoriteResponse;
 import com.example.sestefan.proyecto.domain.Habitaciones;
+import com.example.sestefan.proyecto.domain.Neighborhood;
 import com.example.sestefan.proyecto.domain.Response;
 import com.example.sestefan.proyecto.recycler_view.RecyclerViewClickListener;
 import com.example.sestefan.proyecto.recycler_view.adapter.HouseImagesAdapter;
@@ -43,13 +44,16 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
 
     public static final String EXTRA_DATA = "extra_data";
     private static final String TOKEN = "token";
+    private static final String NEIGHBORHOODS = "neighborhoods";
 
     private Response data;
 
     private String token;
 
-    MapView mapView;
-    GoogleMap map;
+    private Bundle neighborhoods;
+
+    private MapView mapView;
+    private GoogleMap map;
 
     private FacebookLoginFragment.OnFragmentInteractionListener mListener;
 
@@ -59,11 +63,12 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
         // Required empty public constructor
     }
 
-    public static HouseDetailFragment newInstance(Response data, String token) {
+    public static HouseDetailFragment newInstance(Response data, Bundle neighborhoods, String token) {
         HouseDetailFragment fragment = new HouseDetailFragment();
         Bundle args = new Bundle();
         args.putParcelable(EXTRA_DATA, data);
         args.putString(TOKEN, token);
+        args.putParcelable(NEIGHBORHOODS, neighborhoods);
         fragment.setArguments(args);
         return fragment;
     }
@@ -74,6 +79,7 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
         if (getArguments() != null) {
             data = getArguments().getParcelable(EXTRA_DATA);
             token = getArguments().getString(TOKEN);
+            neighborhoods = getArguments().getBundle(NEIGHBORHOODS);
         }
     }
 
@@ -141,7 +147,8 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
                 MapsInitializer.initialize(getContext());
 
                 // Updates the location and zoom of the MapView
-                LatLng location = new LatLng(-34.866944, -56.166667);
+                Neighborhood neighborhood = neighborhoods.getParcelable(data.getInmuebleBarrio());
+                LatLng location = new LatLng(neighborhood.getLatitude(), neighborhood.getLongitude());
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, 14);
                 map.animateCamera(cameraUpdate);
                 map.addMarker(new MarkerOptions().position(location).title("La casa anda por el barrio. Suerte!"));
@@ -218,7 +225,7 @@ public class HouseDetailFragment extends Fragment implements LoaderManager.Loade
                         getActivity().getSupportLoaderManager().initLoader(0, null, this);
                     }
                 } else {
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FacebookLoginFragment.newInstance()).addToBackStack(null).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FacebookLoginFragment.newInstance(neighborhoods)).addToBackStack(null).commit();
                 }
                 break;
         }

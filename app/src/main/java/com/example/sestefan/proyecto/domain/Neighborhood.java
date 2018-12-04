@@ -11,6 +11,12 @@ public class Neighborhood implements Parcelable {
 
     private double longitude;
 
+    public Neighborhood(String name, double latitude, double longitude) {
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     protected Neighborhood(Parcel in) {
         name = in.readString();
         latitude = in.readDouble();

@@ -34,6 +34,7 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
 
     private static final String ARG_USER_LOGGED_IN = "arg_user_logged_in";
     private static final String ARG_TOKEN = "token";
+    private static final String NEIGHBORHOODS = "neighborhoods";
 
     private RecyclerView recyclerView;
     private Houses houses;
@@ -44,6 +45,8 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
 
     private String token;
 
+    private Bundle neighborhoods;
+
     private HouseDTO houseDTO = null;
 
     private HouseDTO filter = null;
@@ -52,11 +55,12 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
         // Required empty public constructor
     }
 
-    public static HomePageFragment newInstance(boolean isUserLoggedIn, String token) {
+    public static HomePageFragment newInstance(boolean isUserLoggedIn, Bundle neighborhoods, String token) {
         HomePageFragment fragment = new HomePageFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_USER_LOGGED_IN, isUserLoggedIn);
         args.putString(ARG_TOKEN, token);
+        args.putBundle(NEIGHBORHOODS, neighborhoods);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,6 +71,7 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
         if (getArguments() != null) {
             isUserLoggedIn = getArguments().getBoolean(ARG_USER_LOGGED_IN);
             token = getArguments().getString(ARG_TOKEN);
+            neighborhoods = getArguments().getBundle(NEIGHBORHOODS);
         }
     }
 
@@ -83,9 +88,9 @@ public class HomePageFragment extends Fragment implements LoaderManager.LoaderCa
         RecyclerViewClickListener adapterI = (view, position) -> {
             Response element = houses.getResponse().get(position);
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HouseDetailFragment.newInstance(element, token)).addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HouseDetailFragment.newInstance(element, neighborhoods, token)).addToBackStack(null).commit();
             } else {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.land_detail, HouseDetailFragment.newInstance(element, token)).addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.land_detail, HouseDetailFragment.newInstance(element, neighborhoods, token)).addToBackStack(null).commit();
             }
             adapter.notifyDataSetChanged();
         };
