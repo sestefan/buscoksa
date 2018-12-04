@@ -65,7 +65,7 @@ public class FavoriteFragment extends Fragment implements LoaderManager.LoaderCa
 
         RecyclerViewClickListener adapterI = (view, position) -> {
             Response element = houses.getResponse().get(position);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HouseDetailFragment.newInstance(element, neighborhoods.getParcelable(element.getInmuebleBarrio()), token)).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, HouseDetailFragment.newInstance(element, neighborhoods, token)).addToBackStack(null).commit();
             adapter.notifyDataSetChanged();
         };
         adapter = new HouseAdapter(getContext(), houses, true, true, adapterI);
