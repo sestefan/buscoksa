@@ -39,7 +39,7 @@ public class HelpFragment extends Fragment {
         toggleButton = v.findViewById(R.id.toggleButton);
         toggleButton.setVisibility(View.INVISIBLE);
 
-        String path = "android.resource://" + getContext().getPackageName() + "/" + R.raw.help_encoded;
+        String path = "android.resource://" + getContext().getPackageName() + "/" + R.raw.help_video;
         videoView.setVideoURI(Uri.parse(path));
 
         MediaController mediaController = new MediaController(getContext());
